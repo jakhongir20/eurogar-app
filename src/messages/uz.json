@@ -293,7 +293,8 @@
     "send": "Yuborish",
     "thanksTitle": "Rahmat!",
     "thanksText": "Sharhingiz qabul qilindi — moderatsiyadan so'ng saytda chiqadi.",
-    "errorText": "Yuborib bo'lmadi. Qayta urinib ko'ring."
+    "errorText": "Yuborib bo'lmadi. Qayta urinib ko'ring.",
+    "showMore": "Yana {count} ta sharh"
   },
   "blog": {
     "title": "Blog",

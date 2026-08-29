@@ -3,7 +3,15 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, MessageSquarePlus, Quote, Send, Star, X } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  MessageSquarePlus,
+  Quote,
+  Send,
+  Star,
+  X,
+} from "lucide-react";
 import { useReviewMutation } from "@/lib/api";
 import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
 import type { Locale, Review } from "@/lib/types";
@@ -34,10 +42,17 @@ function Stars({ n, className }: { n: number; className?: string }) {
   );
 }
 
+/** Bir vaqtda ko'rinadigan sharhlar soni */
+const VISIBLE = 6;
+
 export function TextReviews({ reviews }: { reviews: Review[] }) {
   const t = useTranslations("reviews");
   const locale = useLocale() as Locale;
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const visible = expanded ? reviews : reviews.slice(0, VISIBLE);
+  const hiddenCount = reviews.length - VISIBLE;
 
   /* uz-UZ oy nomlari brauzerlarda notekis — o'zimiz yozamiz */
   const MONTHS: Record<Locale, string[]> = {
@@ -56,7 +71,7 @@ export function TextReviews({ reviews }: { reviews: Review[] }) {
           className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5"
           stagger={0.06}
         >
-          {reviews.map((r) => (
+          {visible.map((r) => (
             <RevealItem key={r.id} className="h-full">
               <figure className="relative flex h-full flex-col rounded-3xl border border-bone-300 bg-white p-6">
                 <Quote
@@ -85,6 +100,20 @@ export function TextReviews({ reviews }: { reviews: Review[] }) {
             </RevealItem>
           ))}
         </RevealGroup>
+      )}
+
+      {/* 6+ bo'lsa — qolganlarini ochish */}
+      {!expanded && hiddenCount > 0 && (
+        <div className="mt-6 flex justify-center">
+          <Button
+            variant="light"
+            size="md"
+            onClick={() => setExpanded(true)}
+            iconRight={<ChevronDown className="size-4" strokeWidth={2.4} />}
+          >
+            {t("showMore", { count: hiddenCount })}
+          </Button>
+        </div>
       )}
 
       {/* CTA */}

@@ -19,7 +19,7 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const reviews = await approvedReviews(6);
+  const reviews = await approvedReviews(30);
 
   return (
     <>
