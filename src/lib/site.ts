@@ -10,7 +10,7 @@ export const site = {
   telegram: "https://t.me/eurogar_uz",
   instagram: "https://www.instagram.com/eurogar_uz",
   facebook: "https://www.facebook.com/profile.php?id=100082077561893",
-  youtube: "https://youtube.com/@eurogar2989",
+  youtube: "https://www.youtube.com/@eurogaruz",
   stats: {
     /** O'zbekiston bozorida 8 yildan buyon */
     years: 8,
