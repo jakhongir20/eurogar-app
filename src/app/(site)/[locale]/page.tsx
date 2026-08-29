@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { approvedReviews } from "@/lib/repo";
 import { Hero } from "@/components/home/hero";
 import { Advantages } from "@/components/home/advantages";
 import { PartnersSection } from "@/components/home/partners-section";
@@ -18,6 +19,7 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const reviews = await approvedReviews(6);
 
   return (
     <>
@@ -27,7 +29,7 @@ export default async function HomePage({
       <CategoriesSection />
       <ServicesSection />
       <FeaturedSection />
-      <VideoReviews />
+      <VideoReviews textReviews={reviews} />
       <ProcessSection />
       <CtaBand />
     </>

@@ -3,7 +3,7 @@
  * Keyinchalik bu joyni Postgres + Prisma bilan almashtiramiz —
  * API route'lar interfeysi o'zgarmaydi.
  */
-import type { Order, OrderStatus } from "./types";
+import type { Order, OrderStatus, Review, ReviewStatus } from "./types";
 
 type Lead = {
   id: string;
@@ -17,11 +17,12 @@ type Lead = {
 };
 
 const g = globalThis as unknown as {
-  __eurogar?: { orders: Order[]; leads: Lead[]; seq: number };
+  __eurogar?: { orders: Order[]; leads: Lead[]; reviews: Review[]; seq: number };
 };
 
-g.__eurogar ??= { orders: [], leads: [], seq: 1041 };
+g.__eurogar ??= { orders: [], leads: [], reviews: [], seq: 1041 };
 const db = g.__eurogar;
+db.reviews ??= []; // eski sessiya obyekti uchun
 
 export const nextCode = (prefix: string) => `${prefix}-${++db.seq}`;
 
@@ -59,4 +60,32 @@ export function addLead(l: Omit<Lead, "id" | "createdAt" | "status">) {
 }
 
 export const listLeads = () => db.leads;
+
+/* ---- sharhlar (TZ 2.10) ---- */
+export function addReview(r: Omit<Review, "id" | "createdAt" | "status">) {
+  const review: Review = {
+    ...r,
+    id: crypto.randomUUID(),
+    status: "pending",
+    createdAt: new Date().toISOString(),
+  };
+  db.reviews.unshift(review);
+  return review;
+}
+
+export const listReviews = () => db.reviews;
+
+export function setReviewStatus(id: string, status: ReviewStatus) {
+  const r = db.reviews.find((x) => x.id === id);
+  if (r) r.status = status;
+  return r ?? null;
+}
+
+export function deleteReview(id: string) {
+  const i = db.reviews.findIndex((x) => x.id === id);
+  if (i < 0) return false;
+  db.reviews.splice(i, 1);
+  return true;
+}
+
 export type { Lead };

@@ -280,7 +280,20 @@
     "title": "Mijozlarimiz nima deydi?",
     "subtitle": "Real obyektlarda o'rnatilgan ishlarimiz va mijozlarning video fikrlari — har biri haqiqiy buyurtma.",
     "watch": "Videoni ko'rish",
-    "more": "YouTube kanalimiz"
+    "more": "YouTube kanalimiz",
+    "leaveReview": "Fikr qoldirish",
+    "ctaText": "Siz ham xizmatimizdan foydalanganmisiz? Fikringiz boshqa mijozlarga to'g'ri tanlov qilishga yordam beradi.",
+    "formTitle": "Fikringizni qoldiring",
+    "formText": "Sharhingiz moderatsiyadan o'tgach saytda ko'rinadi.",
+    "ratingLabel": "Bahoyingiz",
+    "nameLabel": "Ismingiz",
+    "phoneHint": "Ixtiyoriy — saytda ko'rinmaydi",
+    "textLabel": "Sharhingiz — qaysi mahsulot, qanday taassurot?",
+    "textTooShort": "Kamida 10 ta belgi yozing",
+    "send": "Yuborish",
+    "thanksTitle": "Rahmat!",
+    "thanksText": "Sharhingiz qabul qilindi — moderatsiyadan so'ng saytda chiqadi.",
+    "errorText": "Yuborib bo'lmadi. Qayta urinib ko'ring."
   },
   "blog": {
     "title": "Blog",

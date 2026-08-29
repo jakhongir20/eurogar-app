@@ -11,6 +11,7 @@ import {
   Package,
   Send,
   ShoppingCart,
+  Star,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ const NAV = [
   { href: "/admin/products", label: "Mahsulotlar", Icon: Package },
   { href: "/admin/orders", label: "Buyurtmalar", Icon: ShoppingCart },
   { href: "/admin/leads", label: "Arizalar", Icon: Send },
+  { href: "/admin/reviews", label: "Sharhlar", Icon: Star },
 ];
 
 export function AdminShell({

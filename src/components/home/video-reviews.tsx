@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
+import type { Review } from "@/lib/types";
+import { TextReviews } from "./text-reviews";
 
 function YoutubeIcon({ className }: { className?: string }) {
   return (
@@ -42,7 +44,7 @@ function Thumb({ id }: { id: string }) {
   );
 }
 
-export function VideoReviews() {
+export function VideoReviews({ textReviews = [] }: { textReviews?: Review[] }) {
   const t = useTranslations("reviews");
   const [active, setActive] = useState<string | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
@@ -135,6 +137,9 @@ export function VideoReviews() {
           </div>
         </RevealGroup>
       </div>
+
+      {/* ── yozma sharhlar + fikr qoldirish (TZ 2.10) ── */}
+      <TextReviews reviews={textReviews} />
 
       {/* ── video modal ── */}
       <AnimatePresence>

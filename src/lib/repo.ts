@@ -8,7 +8,16 @@
  * shuning uchun Neon'ni ulash: DATABASE_URL qo'yish + `prisma db push` — tamom.
  */
 import { products as seedProducts } from "@/data/products";
-import type { Badge, I18nText, Order, OrderStatus, Product, Spec } from "./types";
+import type {
+  Badge,
+  I18nText,
+  Order,
+  OrderStatus,
+  Product,
+  Review,
+  ReviewStatus,
+  Spec,
+} from "./types";
 import * as mem from "./store";
 import * as memProducts from "./admin-store";
 import type { Lead } from "./store";
@@ -372,4 +381,75 @@ export async function listLeads(): Promise<Lead[]> {
   const p = await db();
   const rows = await p.lead.findMany({ orderBy: { createdAt: "desc" } });
   return rows.map(rowToLead);
+}
+
+/* ─────────────────────────── Sharhlar (TZ 2.10) ─────────────────────────── */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rowToReview(r: any): Review {
+  return {
+    id: r.id,
+    name: r.name,
+    phone: r.phone,
+    rating: r.rating,
+    text: r.text,
+    status: r.status as ReviewStatus,
+    createdAt: (r.createdAt as Date).toISOString(),
+  };
+}
+
+export async function addReview(
+  r: Omit<Review, "id" | "createdAt" | "status">,
+): Promise<Review> {
+  if (!hasDb()) return mem.addReview(r);
+  const p = await db();
+  const row = await p.review.create({
+    data: { name: r.name, phone: r.phone, rating: r.rating, text: r.text },
+  });
+  return rowToReview(row);
+}
+
+/** Saytda ko'rinadigan — faqat tasdiqlanganlar */
+export async function approvedReviews(limit = 12): Promise<Review[]> {
+  if (!hasDb())
+    return mem.listReviews().filter((x) => x.status === "approved").slice(0, limit);
+  const p = await db();
+  const rows = await p.review.findMany({
+    where: { status: "approved" },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+  });
+  return rows.map(rowToReview);
+}
+
+export async function listReviews(): Promise<Review[]> {
+  if (!hasDb()) return mem.listReviews();
+  const p = await db();
+  const rows = await p.review.findMany({ orderBy: { createdAt: "desc" } });
+  return rows.map(rowToReview);
+}
+
+export async function setReviewStatus(
+  id: string,
+  status: ReviewStatus,
+): Promise<Review | null> {
+  if (!hasDb()) return mem.setReviewStatus(id, status);
+  const p = await db();
+  try {
+    const row = await p.review.update({ where: { id }, data: { status } });
+    return rowToReview(row);
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteReview(id: string): Promise<boolean> {
+  if (!hasDb()) return mem.deleteReview(id);
+  const p = await db();
+  try {
+    await p.review.delete({ where: { id } });
+    return true;
+  } catch {
+    return false;
+  }
 }

@@ -28,6 +28,20 @@ export function useLeadMutation() {
   });
 }
 
+export interface ReviewPayload {
+  name: string;
+  phone?: string;
+  rating: number;
+  text: string;
+}
+
+export function useReviewMutation() {
+  return useMutation({
+    mutationFn: (payload: ReviewPayload) =>
+      post<{ ok: true; id: string }>("/api/review", payload),
+  });
+}
+
 export interface OrderPayload {
   name: string;
   phone: string;

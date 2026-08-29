@@ -67,6 +67,20 @@ export interface CartLine {
 
 export type OrderStatus = "new" | "in_progress" | "done" | "canceled";
 
+export type ReviewStatus = "pending" | "approved" | "rejected";
+
+export interface Review {
+  id: string;
+  name: string;
+  /** saytda ko'rsatilmaydi — faqat admin uchun */
+  phone: string;
+  /** 1–5 */
+  rating: number;
+  text: string;
+  status: ReviewStatus;
+  createdAt: string;
+}
+
 export interface Order {
   id: string;
   code: string;

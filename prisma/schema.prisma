@@ -69,3 +69,18 @@ model Lead {
 
   @@index([status])
 }
+
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  /// saytda ko'rsatilmaydi — admin bog'lanishi uchun (ixtiyoriy)
+  phone     String   @default("")
+  /// 1–5
+  rating    Int      @default(5)
+  text      String
+  /// pending → approved (saytda chiqadi) | rejected
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+}
