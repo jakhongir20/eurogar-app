@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cartCount, cartTotal, useCart } from "@/lib/cart-store";
+import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
 import { cn, formatPrice, t } from "@/lib/utils";
 import type { Locale } from "@/lib/types";
 import { ButtonShell } from "@/components/ui/button";
@@ -24,10 +25,9 @@ export function CartDrawer() {
   }, [close]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    if (!isOpen) return;
+    lockScroll();
+    return unlockScroll;
   }, [isOpen]);
 
   const total = cartTotal(lines);

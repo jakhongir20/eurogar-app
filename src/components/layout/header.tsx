@@ -7,6 +7,7 @@ import { Menu, Phone, Search, ShoppingBag, X } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { site } from "@/lib/site";
 import { cartCount, useCart } from "@/lib/cart-store";
+import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/types";
 import { Logo } from "./logo";
@@ -40,12 +41,12 @@ export function Header() {
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
 
+  const overlayOpen = menuOpen || searchOpen;
   useEffect(() => {
-    document.body.style.overflow = menuOpen || searchOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen, searchOpen]);
+    if (!overlayOpen) return;
+    lockScroll();
+    return unlockScroll;
+  }, [overlayOpen]);
 
   const switchLocale = (next: Locale) => {
     if (next === locale) return;

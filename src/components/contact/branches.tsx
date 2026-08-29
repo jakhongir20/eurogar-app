@@ -6,6 +6,7 @@ import { branches } from "@/lib/site";
 import type { Locale } from "@/lib/types";
 import { cn, t } from "@/lib/utils";
 import { RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { BranchMap } from "@/components/ui/branch-map";
 
 /**
  * Filiallar — Toshkent, Jizzax, Samarqand.
@@ -30,12 +31,11 @@ export function Branches({ withMap = true }: { withMap?: boolean }) {
           >
             {withMap && (
               <div className="relative aspect-[16/9] bg-bone-200">
-                <iframe
+                <BranchMap
+                  lat={b.lat}
+                  lng={b.lng}
                   title={t(b.city, locale)}
-                  src={`https://maps.google.com/maps?q=${b.lat},${b.lng}&z=14&output=embed`}
-                  className="absolute inset-0 size-full border-0"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0"
                 />
               </div>
             )}

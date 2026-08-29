@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -143,22 +143,26 @@ export function RevealWords({
       }}
     >
       {words.map((w, i) => (
-        <span key={i} className="inline-block overflow-hidden pb-[0.12em]">
-          <motion.span
-            className={cn("inline-block", wordClassName)}
-            variants={{
-              hidden: { y: "110%", opacity: 0 },
-              show: {
-                y: "0%",
-                opacity: 1,
-                transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
-              },
-            }}
-          >
-            {w}
-            {i < words.length - 1 ? " " : ""}
-          </motion.span>
-        </span>
+        <Fragment key={i}>
+          <span className="inline-block overflow-hidden pb-[0.12em]">
+            <motion.span
+              className={cn("inline-block", wordClassName)}
+              variants={{
+                hidden: { y: "110%", opacity: 0 },
+                show: {
+                  y: "0%",
+                  opacity: 1,
+                  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+                },
+              }}
+            >
+              {w}
+            </motion.span>
+          </span>
+          {/* Bo'sh joy inline-block TAShQARISIDA turishi shart — ichida
+              bo'lsa brauzer uni kesib tashlaydi va so'zlar qo'shilib ketadi */}
+          {i < words.length - 1 ? " " : null}
+        </Fragment>
       ))}
     </motion.span>
   );

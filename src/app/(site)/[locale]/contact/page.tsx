@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Clock, Mail, Phone, Send } from "lucide-react";
+import { Clock, Mail, Phone } from "lucide-react";
 import { site } from "@/lib/site";
+import { SOCIALS } from "@/components/ui/social-icons";
 import { PageHeader } from "@/components/catalog/page-header";
 import { ContactForm } from "@/components/contact/contact-form";
 import { Branches } from "@/components/contact/branches";
@@ -132,27 +133,15 @@ export default async function ContactPage({
                     {t("social")}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <a
-                      href={site.telegram}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="flex items-center gap-2 rounded-full bg-navy-900 px-4 py-2.5 text-[13.5px] font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-brand-400 hover:text-navy-950"
-                    >
-                      <Send className="size-4" strokeWidth={2.3} />
-                      Telegram
-                    </a>
-                    {[
-                      ["Instagram", site.instagram],
-                      ["Facebook", site.facebook],
-                      ["YouTube", site.youtube],
-                    ].map(([label, href]) => (
+                    {SOCIALS.map(({ id, label, href, Icon }) => (
                       <a
-                        key={label}
+                        key={id}
                         href={href}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-2 rounded-full border border-bone-300 px-4 py-2.5 text-[13.5px] font-bold text-graphite transition-all hover:-translate-y-0.5 hover:border-graphite/25"
+                        className="flex items-center gap-2 rounded-full border border-bone-300 bg-white px-4 py-2.5 text-[13.5px] font-bold text-graphite transition-all hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-600"
                       >
+                        <Icon className="size-4 text-brand-600" />
                         {label}
                       </a>
                     ))}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
 
 function YoutubeIcon({ className }: { className?: string }) {
   return (
@@ -50,10 +51,10 @@ export function VideoReviews() {
     if (!active) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setActive(null);
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
+    lockScroll();
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      unlockScroll();
     };
   }, [active]);
 

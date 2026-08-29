@@ -1,48 +1,12 @@
 import { useLocale, useTranslations } from "next-intl";
-import { Mail, MapPin, Phone, Send, Clock } from "lucide-react";
+import { Mail, MapPin, Phone, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { categories } from "@/data/categories";
 import { site } from "@/lib/site";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
+import { SOCIALS } from "@/components/ui/social-icons";
 import { Logo } from "./logo";
-
-function InstagramIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
-      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" />
-    </svg>
-  );
-}
-
-function FacebookIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
-      <path
-        d="M14 8.5V6.8c0-.8.2-1.3 1.4-1.3H17V2.6c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2H8.4v3h2.4V21h3.2v-9.5h2.5l.4-3H14Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
-function YoutubeIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden>
-      <rect x="2.5" y="5.5" width="19" height="13" rx="4" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M10.5 9.5v5l4.2-2.5-4.2-2.5Z" fill="currentColor" />
-    </svg>
-  );
-}
-
-const socials = [
-  { href: site.telegram, label: "Telegram", Icon: Send },
-  { href: site.instagram, label: "Instagram", Icon: InstagramIcon },
-  { href: site.facebook, label: "Facebook", Icon: FacebookIcon },
-  { href: site.youtube, label: "YouTube", Icon: YoutubeIcon },
-];
 
 export function Footer() {
   const tf = useTranslations("footer");
@@ -74,7 +38,7 @@ export function Footer() {
             </p>
 
             <div className="mt-6 flex gap-2">
-              {socials.map(({ href, label, Icon }) => (
+              {SOCIALS.map(({ href, label, Icon }) => (
                 <a
                   key={label}
                   href={href}

@@ -41,7 +41,7 @@ export const branches: Branch[] = [
     city: { uz: "Toshkent", ru: "Ташкент" },
     lat: 41.284989,
     lng: 69.359723,
-    mapUrl: "https://maps.google.com/maps?q=41.284989,69.359723",
+    mapUrl: "https://www.google.com/maps?q=41.284989,69.359723",
     phone: "+998 91 888 02 01",
     main: true,
   },
