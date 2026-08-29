@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img">
+<defs>
+  <linearGradient id="bgv" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#ffffff"/>
+    <stop offset="78%" stop-color="#fbfcfd"/>
+    <stop offset="100%" stop-color="#eef2f5"/>
+  </linearGradient>
+  <linearGradient id="steelV" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%"  stop-color="#9aa4ad"/>
+    <stop offset="22%" stop-color="#e8ecef"/>
+    <stop offset="46%" stop-color="#c3cbd1"/>
+    <stop offset="74%" stop-color="#f2f5f7"/>
+    <stop offset="100%" stop-color="#8f99a2"/>
+  </linearGradient>
+  <linearGradient id="steelH" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"  stop-color="#eef1f3"/>
+    <stop offset="45%" stop-color="#c9d0d6"/>
+    <stop offset="100%" stop-color="#98a2ab"/>
+  </linearGradient>
+  <linearGradient id="darkbase" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#4a545e"/>
+    <stop offset="100%" stop-color="#2c343c"/>
+  </linearGradient>
+  <radialGradient id="shadow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0%" stop-color="#1c2830" stop-opacity="0.32"/>
+    <stop offset="70%" stop-color="#1c2830" stop-opacity="0.10"/>
+    <stop offset="100%" stop-color="#1c2830" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+<rect width="1600" height="1200" fill="url(#bgv)"/>
+    <ellipse cx="560" cy="914" rx="202.5" ry="26" fill="url(#shadow)"/>
+    <!-- asos flanets -->
+    <rect x="443" y="874" width="234" height="34" rx="10" fill="url(#darkbase)"/>
+    <!-- tana -->
+    <rect x="485" y="430" width="150" height="452" rx="6" fill="url(#steelV)"/>
+    <!-- yorug'lik chizig'i -->
+    <rect x="509" y="505" width="15" height="355" rx="7.5" fill="#ffffff" opacity="0.55"/>
+    <!-- qalpoq -->
+    <path d="M485 432 a75 75 0 0 1 150 0 z" fill="url(#steelH)"/>
+    <!-- reflektor halqa -->
+    <rect x="485" y="531" width="150" height="30" fill="#c62828"/>
+    <rect x="485" y="561" width="150" height="18" fill="#f5f6f7"/>
+    <!-- pastki halqa -->
+    <rect x="481" y="836" width="158" height="22" rx="8" fill="url(#steelH)"/>
+    <ellipse cx="1080" cy="894" rx="159.3" ry="26" fill="url(#shadow)"/>
+    <!-- asos flanets -->
+    <rect x="987.96" y="854" width="184.08" height="34" rx="10" fill="url(#darkbase)"/>
+    <!-- tana -->
+    <rect x="1021" y="500" width="118" height="362" rx="6" fill="url(#steelV)"/>
+    <!-- yorug'lik chizig'i -->
+    <rect x="1039.88" y="559" width="11.8" height="281" rx="5.9" fill="#ffffff" opacity="0.55"/>
+    <!-- qalpoq -->
+    <path d="M1021 502 a59 59 0 0 1 118 0 z" fill="url(#steelH)"/>
+    <!-- reflektor halqa -->
+    
+    <!-- pastki halqa -->
+    <rect x="1017" y="816" width="126" height="22" rx="8" fill="url(#steelH)"/>
+    <ellipse cx="230" cy="884" rx="135" ry="26" fill="url(#shadow)"/>
+    <!-- asos flanets -->
+    <rect x="152" y="844" width="156" height="34" rx="10" fill="url(#darkbase)"/>
+    <!-- tana -->
+    <rect x="180" y="540" width="100" height="312" rx="6" fill="url(#steelV)"/>
+    <!-- yorug'lik chizig'i -->
+    <rect x="196" y="590" width="10" height="240" rx="5" fill="#ffffff" opacity="0.55"/>
+    <!-- qalpoq -->
+    <path d="M180 542 a50 50 0 0 1 100 0 z" fill="url(#steelH)"/>
+    <!-- reflektor halqa -->
+    
+    <!-- pastki halqa -->
+    <rect x="176" y="806" width="108" height="22" rx="8" fill="url(#steelH)"/></svg>

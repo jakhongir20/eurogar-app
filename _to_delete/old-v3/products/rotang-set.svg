@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img">
+<defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d2e3d"/>
+      <stop offset="100%" stop-color="#04222f"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="0.5" cy="0.28" r="0.75">
+      <stop offset="0%" stop-color="#2e7ea0" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floorg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#062733" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#062733" stop-opacity="0.4"/>
+    </linearGradient>
+    <radialGradient id="contact" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="26" stdDeviation="26" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  <linearGradient id="m1c" x1="0.250" y1="0.067" x2="0.750" y2="0.933">
+    <stop offset="0%"   stop-color="#7d5733"/>
+    <stop offset="18%"  stop-color="#a97a4d"/>
+    <stop offset="38%"  stop-color="#bd8d5d"/>
+    <stop offset="52%"  stop-color="#a97a4d"/>
+    <stop offset="78%"  stop-color="#7d5733"/>
+    <stop offset="100%" stop-color="#523720"/>
+  </linearGradient>
+  <linearGradient id="m1d" x1="0.250" y1="0.067" x2="0.750" y2="0.933">
+    <stop offset="0%"   stop-color="#ddd6c4"/>
+    <stop offset="18%"  stop-color="#f3efe4"/>
+    <stop offset="38%"  stop-color="#fbf8f1"/>
+    <stop offset="52%"  stop-color="#f3efe4"/>
+    <stop offset="78%"  stop-color="#ddd6c4"/>
+    <stop offset="100%" stop-color="#b8b0a0"/>
+  </linearGradient></defs>
+<g transform="translate(600 450) scale(1.16) translate(-600 -450)">
+
+    <rect width="1200" height="900" fill="url(#bg)"/>
+    <rect width="1200" height="900" fill="url(#spot)"/>
+    <rect y="684" width="1200" height="216" fill="url(#floorg)"/>
+  <ellipse cx="600" cy="700" rx="250" ry="22" fill="url(#contact)"/>
+  <g filter="url(#drop)">
+    <path d="M420 560 Q400 330 470 262 Q600 200 730 262 Q800 330 780 560 Z" fill="url(#m1c)"/>
+    <path d="M420 560 Q400 330 470 262 Q600 200 730 262 Q800 330 780 560 Z" fill="none" stroke="rgb(0 0 0 / .3)" stroke-width="6"/>
+    <g clip-path="none" opacity=".55"><path d="M430 300 Q420 430 446 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M446 300 Q436 430 462 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M462 300 Q452 430 478 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M478 300 Q468 430 494 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M494 300 Q484 430 510 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M510 300 Q500 430 526 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M526 300 Q516 430 542 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M542 300 Q532 430 558 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M558 300 Q548 430 574 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M574 300 Q564 430 590 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M590 300 Q580 430 606 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M606 300 Q596 430 622 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M622 300 Q612 430 638 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M638 300 Q628 430 654 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M654 300 Q644 430 670 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M670 300 Q660 430 686 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M686 300 Q676 430 702 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M702 300 Q692 430 718 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M718 300 Q708 430 734 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M734 300 Q724 430 750 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M750 300 Q740 430 766 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/><path d="M766 300 Q756 430 782 560" stroke="rgb(0 0 0 / .12)" stroke-width="3" fill="none"/></g>
+    <rect x="440" y="520" width="320" height="66" rx="26" fill="url(#m1d)"/>
+    <rect x="440" y="520" width="320" height="66" rx="26" fill="none" stroke="rgb(0 0 0 / .18)" stroke-width="3"/>
+    <rect x="470" y="586" width="20" height="110" rx="9" fill="url(#m1c)"/>
+    <rect x="710" y="586" width="20" height="110" rx="9" fill="url(#m1c)"/>
+  </g>
+</g>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 104" fill="none" role="img" aria-label="EUROGAR">
+  <!-- tashqi ramka -->
+  <rect x="2.4" y="2.4" width="123.2" height="99.2" rx="30" stroke="var(--eg-navy, #0B4A63)" stroke-width="3.2"/>
+
+  <!-- tom -->
+  <path d="M18 47 L64 18 L110 47"
+        stroke="var(--eg-cyan, #29ABE2)" stroke-width="7.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ustunlar -->
+  <path d="M24.5 43.5 V80" stroke="var(--eg-cyan, #29ABE2)" stroke-width="7.5" stroke-linecap="round"/>
+  <path d="M103.5 43.5 V80" stroke="var(--eg-cyan, #29ABE2)" stroke-width="7.5" stroke-linecap="round"/>
+
+  <!-- roleta -->
+  <g fill="var(--eg-navy, #0B4A63)">
+    <rect x="39" y="43" width="50" height="6.4" rx="1"/>
+    <rect x="39.5" y="51.5" width="4" height="9" rx="1"/>
+    <rect x="84.5" y="51.5" width="4" height="9" rx="1"/>
+    <rect x="45" y="52.5" width="38" height="4.1" rx="0.8"/>
+    <rect x="45" y="58.6" width="38" height="4.1" rx="0.8"/>
+    <rect x="45" y="64.7" width="38" height="4.1" rx="0.8"/>
+    <rect x="45" y="70.8" width="38" height="4.1" rx="0.8"/>
+  </g>
+
+  <!-- pult va signal -->
+  <g stroke="var(--eg-navy, #0B4A63)" stroke-width="1.7" stroke-linecap="round">
+    <rect x="57.4" y="80.4" width="7.4" height="11.4" rx="2.2"
+          transform="rotate(-28 61 86)" fill="none"/>
+    <circle cx="60.4" cy="87.4" r="1.05" fill="var(--eg-navy, #0B4A63)" stroke="none"/>
+    <path d="M66.6 80.4 a4.2 4.2 0 0 1 1.1 4.2"/>
+    <path d="M69.4 77.6 a7.6 7.6 0 0 1 1.9 7.6"/>
+  </g>
+</svg>
