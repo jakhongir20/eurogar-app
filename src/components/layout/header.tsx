@@ -16,6 +16,7 @@ import { MobileMenu } from "./mobile-menu";
 export const NAV = [
   { key: "catalog", href: "/catalog" },
   { key: "calculator", href: "/calculator" },
+  { key: "services", href: "/services" },
   { key: "blog", href: "/blog" },
   { key: "about", href: "/about" },
   { key: "contact", href: "/contact" },

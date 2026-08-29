@@ -4,12 +4,17 @@
  */
 import { chromium } from "playwright";
 
-const B = process.argv[2] || "http://localhost:3201";
+const B = process.argv[2] || "http://localhost:3310";
 const PAGES = [
   "/uz",
+  "/uz/services",
+  "/uz/faq",
+  "/uz/warranty",
+  "/uz/blog",
+  "/uz/blog/rolstavniy-darvoza-nima",
   "/uz/catalog",
-  "/uz/catalog/darvozalar",
-  "/uz/product/seksion-darvoza-alutech-trend",
+  "/uz/catalog/rolstavniy-darvoza",
+  "/uz/product/seksion-darvoza-garaj",
   "/uz/calculator",
   "/uz/contact",
   "/uz/about",

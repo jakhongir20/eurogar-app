@@ -14,7 +14,10 @@
     "menu": "Menyu",
     "close": "Yopish",
     "blog": "Blog",
-    "reviews": "Mijozlar fikri"
+    "reviews": "Mijozlar fikri",
+    "services": "Xizmatlar",
+    "faq": "Savol-javob",
+    "warranty": "Kafolat"
   },
   "common": {
     "from": "dan",
@@ -295,5 +298,29 @@
     "subtitle": "Uch shaharda o'z filiallarimiz bor — o'lchov va o'rnatish uchun yaqiningizdagi jamoa keladi.",
     "openMap": "Xaritada ochish",
     "call": "Qo'ng'iroq qilish"
+  },
+  "services": {
+    "eyebrow": "Xizmatlar",
+    "title": "To'liq sikl — bitta jamoadan",
+    "subtitle": "O'lchovdan servis xizmatigacha barcha bosqichlarni o'zimiz bajaramiz — pudratchilarsiz va ortiqcha to'lovlarsiz.",
+    "all": "Barcha xizmatlar",
+    "order": "Chaqiruvga yozilish",
+    "included": "Nimalar kiradi"
+  },
+  "faq": {
+    "title": "Ko'p so'raladigan savollar",
+    "subtitle": "Buyurtma, o'lchov, kafolat va to'lov haqida eng ko'p beriladigan savollarga javoblar.",
+    "askTitle": "Savolingiz bormi?",
+    "askText": "Javob topa olmadingizmi? Raqamingizni qoldiring — mutaxassisimiz qo'ng'iroq qilib javob beradi."
+  },
+  "warranty": {
+    "title": "Kafolat va servis",
+    "subtitle": "Barcha mahsulotlarga turiga qarab 1 yildan 5 yilgacha kafolat — konstruksiyaga ham, montajga ham.",
+    "coveredTitle": "Kafolat nimani qamrab oladi",
+    "notCoveredTitle": "Kafolat qamrab olmaydi",
+    "termsTitle": "Kafolat muddatlari",
+    "termsNote": "Aniq muddat mahsulot turi va komplektatsiyaga bog'liq — shartnoma va kafolat hujjatida yozib beriladi.",
+    "serviceTitle": "Kafolat holati yuz bersa",
+    "years": "yil"
   }
 }

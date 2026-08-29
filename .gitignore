@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vaqtinchalik: foydalanuvchi o'zi o'chiradi
+/_to_delete/
