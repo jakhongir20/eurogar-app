@@ -40,6 +40,9 @@ yarn-error.log*
 # admin yuklagan rasmlar (lokal dev; prod'da Vercel Blob)
 /public/uploads/
 
+# VM o'chira olmagan fayllar uchun karantin (foydalanuvchi o'zi tozalaydi)
+/_to_delete/
+
 # vercel
 .vercel
 

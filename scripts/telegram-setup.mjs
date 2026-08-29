@@ -54,7 +54,10 @@ if (!/^https:\/\//.test(base)) {
 }
 
 let secret = process.env.TELEGRAM_WEBHOOK_SECRET;
-if (!secret) {
+if (secret) {
+  console.log(`🔐 Secret: .env.local'dan olindi (oxiri ...${secret.slice(-4)}).`);
+  console.log(`   Vercel → Environment Variables'da TELEGRAM_WEBHOOK_SECRET AYNAN shu bo'lishi shart.`);
+} else {
   secret = crypto.randomBytes(16).toString("hex");
   console.log(`
 ℹ️  TELEGRAM_WEBHOOK_SECRET yo'q edi — yangi taklif:
@@ -82,10 +85,43 @@ if (info.ok) {
     (w.last_error_message ? ` | oxirgi xato: ${w.last_error_message}` : ""));
 }
 
+/* ── Jonli tekshiruv: saytdagi webhook haqiqatan javob beradimi? ── */
+try {
+  const probe = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-telegram-bot-api-secret-token": secret,
+    },
+    body: "{}",
+  });
+  if (probe.status === 200) {
+    console.log(`✅ Sayt tekshiruvi: webhook jonli va secret mos — bot javob beradi.`);
+  } else if (probe.status === 401) {
+    console.log(`❌ Sayt tekshiruvi: 401 — serverdagi TELEGRAM_WEBHOOK_SECRET boshqa yoki yo'q.
+   Yechim: Vercel → Settings → Environment Variables ga xuddi shu secret'ni
+   qo'shing va QAYTA DEPLOY qiling, keyin skriptni yana ishga tushiring.`);
+  } else if (probe.status === 404) {
+    console.log(`❌ Sayt tekshiruvi: 404 — saytda /api/telegram/webhook yo'q.
+   Sabab: oxirgi kod hali deploy qilinmagan. Yechim:
+
+       git push origin main
+
+   Vercel avtomatik deploy qiladi (1–2 daqiqa), keyin skriptni yana ishga tushiring.`);
+  } else {
+    console.log(`⚠️  Sayt tekshiruvi: kutilmagan status ${probe.status} — deploy loglarini ko'ring.`);
+  }
+} catch (e) {
+  console.log(`⚠️  Sayt tekshiruviga ulanib bo'lmadi: ${e?.message ?? e}`);
+}
+
 console.log(`
 Keyingi qadamlar:
   1. Menejerlar guruhini oching (yo'q bo'lsa yarating) va @${me.result.username} ni qo'shing
   2. Guruhda yozing:  /id@${me.result.username}
   3. Bot aytgan raqamni TELEGRAM_CHAT_ID qilib .env.local va Vercel'ga qo'shing
   4. Sinov: botga shaxsiy xabar yozing — "Tez orada bog'lanamiz" javobi kelishi kerak,
-     saytdan ariza yuboring — guruhga xabar tushadi.`);
+     saytdan ariza yuboring — guruhga xabar tushadi.
+
+Vercel'da bo'lishi kerak (Settings → Environment Variables):
+  TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, TELEGRAM_WEBHOOK_SECRET — keyin redeploy.`);

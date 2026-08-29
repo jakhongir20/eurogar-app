@@ -13,10 +13,17 @@ import { tgSend } from "@/lib/telegram";
  *  - guruhlardagi oddiy suhbatga aralashmaydi
  */
 
-const WELCOME =
+/** Saytning jonli manzili — so'rovning o'zidan olinadi (domen almashsa ham to'g'ri qoladi) */
+function liveOrigin(req: Request): string | null {
+  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+  return host && !host.startsWith("localhost") ? `https://${host}` : null;
+}
+
+const welcome = (origin: string | null) =>
   `👋 Assalomu alaykum! <b>${site.name}</b> botiga xush kelibsiz.\n\n` +
   `Savolingiz yoki buyurtmangizni shu yerga yozib qoldiring.\n\n` +
-  `☎️ ${site.phones[0]}\n🕘 Dush–Shan, 9:00–18:00\n🌐 ${site.domain}`;
+  `☎️ ${site.phones[0]}\n🕘 Dush–Shan, 9:00–18:00` +
+  (origin ? `\n🌐 ${origin}` : "");
 
 const RECEIVED =
   `✅ Xabaringiz qabul qilindi!\n\n` +
@@ -50,7 +57,10 @@ export async function POST(req: Request) {
           `buyurtma va arizalar shu yerga tushadi.`,
       );
     } else if (isPrivate) {
-      await tgSend(chatId, /^\/start\b/.test(text) ? WELCOME : RECEIVED);
+      await tgSend(
+        chatId,
+        /^\/start\b/.test(text) ? welcome(liveOrigin(req)) : RECEIVED,
+      );
     }
     /* guruhdagi oddiy xabarlar — javobsiz, spam bo'lmasin */
   } catch {
