@@ -1,0 +1,43 @@
+"use client";
+
+import { useMutation } from "@tanstack/react-query";
+import type { CartLine } from "./types";
+
+async function post<T>(url: string, body: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`request_failed_${res.status}`);
+  return res.json() as Promise<T>;
+}
+
+export interface LeadPayload {
+  name: string;
+  phone: string;
+  note?: string;
+  source: "cta" | "contact" | "calculator";
+  meta?: Record<string, string | number>;
+}
+
+export function useLeadMutation() {
+  return useMutation({
+    mutationFn: (payload: LeadPayload) =>
+      post<{ ok: true; id: string }>("/api/lead", payload),
+  });
+}
+
+export interface OrderPayload {
+  name: string;
+  phone: string;
+  note?: string;
+  items: Pick<CartLine, "name" | "qty" | "price">[];
+}
+
+export function useOrderMutation() {
+  return useMutation({
+    mutationFn: (payload: OrderPayload) =>
+      post<{ ok: true; code: string; id: string }>("/api/order", payload),
+  });
+}
