@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useHoneypot } from "@/components/ui/honeypot";
 import { GOALS, trackGoal } from "@/lib/analytics";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
-import { Input, PhonePrefix, Select, Textarea } from "@/components/ui/field";
+import { Input, PhoneInput, Select, Textarea } from "@/components/ui/field";
 
 export function ContactForm() {
   const tcon = useTranslations("contact");
@@ -96,24 +96,15 @@ export function ContactForm() {
           error={errors.name}
         />
 
-        <div className="relative">
-          <Input
-            label={tcta("phone")}
-            inputMode="tel"
-            autoComplete="tel"
-            placeholder="90 123 45 67"
-            className="pl-[4.4rem] font-medium tracking-wide"
-            value={formatPhone(phone).replace("+998 ", "")}
-            onChange={(e) => {
-              setPhone(e.target.value);
-              if (errors.phone) setErrors((s) => ({ ...s, phone: undefined }));
-            }}
-            error={errors.phone}
-          />
-          <div className="pointer-events-none absolute inset-x-0 top-[1.9rem] bottom-0">
-            <PhonePrefix />
-          </div>
-        </div>
+        <PhoneInput
+          label={tcta("phone")}
+          value={formatPhone(phone).replace("+998 ", "")}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            if (errors.phone) setErrors((s) => ({ ...s, phone: undefined }));
+          }}
+          error={errors.phone}
+        />
 
         <Select
           label={tcon("region")}

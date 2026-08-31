@@ -21,7 +21,7 @@ import { Button, ButtonShell } from "@/components/ui/button";
 import { useHoneypot } from "@/components/ui/honeypot";
 import { GOALS, trackGoal } from "@/lib/analytics";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
-import { Input, PhonePrefix, Textarea } from "@/components/ui/field";
+import { Input, PhoneInput, Textarea } from "@/components/ui/field";
 
 export function CheckoutView() {
   const locale = useLocale() as Locale;
@@ -160,24 +160,15 @@ export function CheckoutView() {
             error={errors.name}
           />
 
-          <div className="relative">
-            <Input
-              label={tch("phone")}
-              inputMode="tel"
-              autoComplete="tel"
-              placeholder="90 123 45 67"
-              className="pl-[4.4rem] font-medium tracking-wide"
-              value={formatPhone(phone).replace("+998 ", "")}
-              onChange={(e) => {
-                setPhone(e.target.value);
-                if (errors.phone) setErrors((s) => ({ ...s, phone: undefined }));
-              }}
-              error={errors.phone}
-            />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[1.9rem]">
-              <PhonePrefix />
-            </div>
-          </div>
+          <PhoneInput
+            label={tch("phone")}
+            value={formatPhone(phone).replace("+998 ", "")}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              if (errors.phone) setErrors((s) => ({ ...s, phone: undefined }));
+            }}
+            error={errors.phone}
+          />
 
           <Textarea
             label={tch("note")}
