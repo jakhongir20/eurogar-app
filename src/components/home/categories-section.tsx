@@ -36,12 +36,13 @@ export async function CategoriesSection() {
           className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
           stagger={0.07}
         >
-          {categories.slice(0, 6).map((c, i) => (
+          {categories.slice(0, 6).map((c) => (
             <RevealItem key={c.id} className="h-full">
               <CategoryCard
                 category={c}
                 count={counts[c.slug] ?? 0}
-                priority={i < 3}
+                /* priority YO'Q: bu bloк ekran ostida turadi. Uni preload
+                   qilish hero rasmi (LCP) bilan kanal talashadi. */
               />
             </RevealItem>
           ))}

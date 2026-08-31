@@ -55,7 +55,8 @@ export function Hero() {
     <section
       ref={ref}
       onMouseMove={(e) => {
-        if (reduce) return;
+        /* Sensorli ekranlarda bu effekt ko'rinmaydi — hisoblashning hojati yo'q */
+        if (reduce || !window.matchMedia("(pointer: fine)").matches) return;
         const r = e.currentTarget.getBoundingClientRect();
         mx.set(((e.clientX - r.left) / r.width) * 100);
         my.set(((e.clientY - r.top) / r.height) * 100);

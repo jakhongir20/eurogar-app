@@ -1,12 +1,12 @@
 "use client";
 
-import { forwardRef, useId } from "react";
+import { forwardRef, useId, useState } from "react";
 import type {
   ComponentPropsWithoutRef,
   ReactNode,
   SelectHTMLAttributes,
 } from "react";
-import { AlertCircle, ChevronDown } from "lucide-react";
+import { AlertCircle, ChevronDown, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ────────────────────────────────────────────
@@ -86,10 +86,25 @@ export interface InputProps extends ComponentPropsWithoutRef<"input"> {
   tone?: Tone;
   wrapClassName?: string;
   addon?: ReactNode;
+  /** O'ng tomondagi bosiladigan element (masalan parolni ko'rsatish tugmasi) */
+  action?: ReactNode;
+  /** Chap tomondagi o'zgarmas belgi (masalan +998) */
+  prefix?: ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, error, hint, tone = "light", wrapClassName, addon, className, ...props },
+  {
+    label,
+    error,
+    hint,
+    tone = "light",
+    wrapClassName,
+    addon,
+    action,
+    prefix,
+    className,
+    ...props
+  },
   ref,
 ) {
   const auto = useId();
@@ -104,11 +119,27 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       className={wrapClassName}
     >
       <div className="relative">
+        {prefix && (
+          <span
+            className={cn(
+              "pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[15px] font-semibold",
+              tone === "dark" ? "text-white/55" : "text-muted",
+            )}
+          >
+            {prefix}
+          </span>
+        )}
         <input
           ref={ref}
           id={id}
           aria-invalid={!!error}
-          className={cn(control(tone, !!error), "h-13 py-3.5", addon && "pr-16", className)}
+          className={cn(
+            control(tone, !!error),
+            "h-13 py-3.5",
+            addon && "pr-16",
+            action && "pr-13",
+            className,
+          )}
           {...props}
         />
         {addon && (
@@ -121,8 +152,51 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             {addon}
           </span>
         )}
+        {action && (
+          <span className="absolute top-1/2 right-2 -translate-y-1/2">
+            {action}
+          </span>
+        )}
       </div>
     </Wrap>
+  );
+});
+
+/* ──────────────── Parol maydoni ──────────────── */
+
+/** Ko'z tugmasi bilan: parolni ochib-yopib ko'rsatadi */
+export const PasswordInput = forwardRef<
+  HTMLInputElement,
+  Omit<InputProps, "type" | "action">
+>(function PasswordInput({ tone = "light", ...props }, ref) {
+  const [shown, setShown] = useState(false);
+  return (
+    <Input
+      ref={ref}
+      tone={tone}
+      type={shown ? "text" : "password"}
+      action={
+        <button
+          type="button"
+          onClick={() => setShown((v) => !v)}
+          aria-label={shown ? "Parolni yashirish" : "Parolni ko'rsatish"}
+          aria-pressed={shown}
+          className={cn(
+            "flex size-9 items-center justify-center rounded-xl transition-colors duration-200",
+            tone === "dark"
+              ? "text-white/55 hover:bg-white/10 hover:text-white"
+              : "text-muted hover:bg-bone-200 hover:text-graphite",
+          )}
+        >
+          {shown ? (
+            <EyeOff className="size-[18px]" strokeWidth={2.1} />
+          ) : (
+            <Eye className="size-[18px]" strokeWidth={2.1} />
+          )}
+        </button>
+      }
+      {...props}
+    />
   );
 });
 
@@ -220,6 +294,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
 /* ──────────────── Telefon maydoni ──────────────── */
 
+/**
+ * +998 prefiksi input'ning ICHIGA joylashadi (`prefix` sloti orqali), shuning
+ * uchun xato matni chiqib maydon balandlashganda ham joyida qoladi.
+ */
 export const PhoneInput = forwardRef<HTMLInputElement, InputProps>(
   function PhoneInput({ className, ...props }, ref) {
     return (
@@ -228,23 +306,10 @@ export const PhoneInput = forwardRef<HTMLInputElement, InputProps>(
         inputMode="tel"
         autoComplete="tel"
         placeholder="90 123 45 67"
-        className={cn("pl-[4.75rem] font-medium tracking-wide", className)}
+        prefix="+998"
+        className={cn("pl-[4.4rem] font-medium tracking-wide", className)}
         {...props}
       />
     );
   },
 );
-
-/** PhoneInput bilan birga ishlatiladigan +998 prefiksi */
-export function PhonePrefix({ tone = "light" }: { tone?: Tone }) {
-  return (
-    <span
-      className={cn(
-        "pointer-events-none absolute bottom-0 left-4 flex h-13 items-center text-[15px] font-semibold",
-        tone === "dark" ? "text-white/55" : "text-muted",
-      )}
-    >
-      +998
-    </span>
-  );
-}

@@ -68,8 +68,12 @@
   --color-muted-dark: #8fa6b4;
 
   /* ---- Fonts ---- */
-  --font-display: var(--font-unbounded), system-ui, sans-serif;
-  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  /* Har bir subset alohida @font-face — brauzer unicode-range bo'yicha
+     faqat kerakligini yuklaydi (layout.tsx dagi izohga qarang) */
+  --font-display: var(--f-display-latin), var(--f-display-cyr),
+    var(--f-display-ext), system-ui, sans-serif;
+  --font-sans: var(--f-sans-latin), var(--f-sans-cyr), var(--f-sans-ext),
+    system-ui, sans-serif;
 
   /* ---- Easing ---- */
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -289,6 +293,38 @@
 /* Balanced headline wrapping */
 @utility text-balance-tight {
   text-wrap: balance;
+}
+
+/* ============================================================
+   Sarlavha so'zlarini ko'tarish — SOF CSS
+   ------------------------------------------------------------
+   Nega JS emas: hero sarlavhasi LCP elementi. Uni motion bilan
+   animatsiya qilganda matn JS yuklanib gidratsiya bo'lgunча
+   ko'rinmasdi va mobil ulanishda LCP ~4s ga chiqib ketardi.
+   CSS animatsiyasi stil o'qilishi bilanoq boshlanadi — LCP ~1s.
+   ============================================================ */
+
+@keyframes word-rise {
+  from {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.word-rise > span > span {
+  display: inline-block;
+  animation: word-rise 0.9s var(--ease-expo) both;
+  animation-delay: calc(var(--eg-d, 0s) + var(--eg-i, 0) * 0.07s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-rise > span > span {
+    animation: none;
+  }
 }
 
 /* ============================================================

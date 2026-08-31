@@ -66,7 +66,7 @@ export default async function CatalogPage({
                 <CategoryCard
                   category={c}
                   count={counts[c.slug] ?? 0}
-                  priority={i < 4}
+                  priority={i < 2}
                 />
               </RevealItem>
             ))}

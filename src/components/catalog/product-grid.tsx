@@ -256,7 +256,7 @@ export function ProductGrid({
                 }}
                 className="h-full"
               >
-                <ProductCard product={p} priority={i < 3} className="h-full" />
+                <ProductCard product={p} priority={i < 2} className="h-full" />
               </motion.div>
             ))}
           </AnimatePresence>

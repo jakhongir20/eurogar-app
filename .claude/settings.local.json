@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ln -sfn /Users/macbook/WebstormProjects/eurogar-app/node_modules /private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad/node_modules)",
+      "Bash(node /private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad/measure.mjs https://eurogar-app.vercel.app/admin/login /private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad/prod_login.png)",
+      "Bash(npx --yes vercel@latest env ls production)",
+      "Bash(curl -s -o /dev/null --max-time 3 http://localhost:3200/ru/contact)",
+      "Bash(break)",
+      "Bash(perl -e 'select\\(undef,undef,undef,2\\)')",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" --max-time 25 http://localhost:3200/ru/contact)",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" --max-time 8 http://localhost:3001/ru/contact)"
+    ]
+  }
+}

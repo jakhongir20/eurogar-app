@@ -3,10 +3,10 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { KeyRound, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/field";
+import { PasswordInput } from "@/components/ui/field";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -69,9 +69,8 @@ export default function AdminLoginPage() {
         </div>
 
         <div className="mt-8">
-          <Input
+          <PasswordInput
             tone="dark"
-            type="password"
             label="Parol"
             autoFocus
             autoComplete="current-password"
@@ -104,12 +103,6 @@ export default function AdminLoginPage() {
         >
           {loading ? "Tekshirilmoqda…" : "Kirish"}
         </Button>
-
-        <p className="mt-5 flex items-start gap-2 text-[12px] leading-relaxed text-white/60">
-          <KeyRound className="mt-0.5 size-3.5 shrink-0" strokeWidth={2.2} />
-          Demo parol: <span className="font-bold text-white">eurogar2026</span>
-          {" — "}prod&apos;da .env faylidagi ADMIN_PASSWORD bilan almashtiriladi.
-        </p>
       </motion.form>
     </div>
   );

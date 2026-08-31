@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Fragment, type ReactNode } from "react";
+import { Fragment, type CSSProperties, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -118,7 +118,15 @@ export function RevealItem({
   );
 }
 
-/** Har bir so'zni alohida ko'taradigan sarlavha animatsiyasi */
+/**
+ * Har bir so'zni alohida ko'taradigan sarlavha animatsiyasi.
+ *
+ * MUHIM: bu komponent motion ISHLATMAYDI. Sarlavha — sahifaning LCP
+ * elementi; uni JS bilan animatsiya qilganda matn gidratsiyagacha
+ * ko'rinmay turadi va mobil ulanishda LCP bir necha soniyaga cho'ziladi.
+ * Animatsiya globals.css dagi `word-rise` keyframe orqali beriladi —
+ * u stil o'qilishi bilan darhol boshlanadi.
+ */
 export function RevealWords({
   text,
   className,
@@ -133,37 +141,24 @@ export function RevealWords({
   const words = text.split(" ");
 
   return (
-    <motion.span
-      className={cn("inline-block", className)}
-      initial="hidden"
-      animate="show"
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: 0.07, delayChildren: delay } },
-      }}
+    <span
+      className={cn("word-rise inline-block", className)}
+      style={{ "--eg-d": `${delay}s` } as CSSProperties}
     >
       {words.map((w, i) => (
         <Fragment key={i}>
           <span className="inline-block overflow-hidden pb-[0.12em]">
-            <motion.span
-              className={cn("inline-block", wordClassName)}
-              variants={{
-                hidden: { y: "110%", opacity: 0 },
-                show: {
-                  y: "0%",
-                  opacity: 1,
-                  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
-                },
-              }}
+            <span
+              className={wordClassName}
+              style={{ "--eg-i": i } as CSSProperties}
             >
               {w}
-            </motion.span>
+            </span>
           </span>
-          {/* Bo'sh joy inline-block TAShQARISIDA turishi shart — ichida
-              bo'lsa brauzer uni kesib tashlaydi va so'zlar qo'shilib ketadi */}
+          {/* bo'sh joy inline-block TAShQARISIDA — aks holda kesiladi */}
           {i < words.length - 1 ? " " : null}
         </Fragment>
       ))}
-    </motion.span>
+    </span>
   );
 }

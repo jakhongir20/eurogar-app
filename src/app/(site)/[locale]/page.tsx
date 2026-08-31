@@ -1,14 +1,32 @@
+import dynamic from "next/dynamic";
 import { setRequestLocale } from "next-intl/server";
 import { approvedReviews } from "@/lib/repo";
 import { Hero } from "@/components/home/hero";
-import { Advantages } from "@/components/home/advantages";
-import { PartnersSection } from "@/components/home/partners-section";
-import { ServicesSection } from "@/components/home/services-section";
 import { CategoriesSection } from "@/components/home/categories-section";
 import { FeaturedSection } from "@/components/home/featured-section";
-import { VideoReviews } from "@/components/home/video-reviews";
-import { ProcessSection } from "@/components/home/process-section";
-import { CtaBand } from "@/components/home/cta-band";
+
+/* Ekran ostidagi client-bloklar alohida chunk'ga ajratiladi: HTML'ga
+   avvalgidek server tomonda chiziladi (SEO va matn joyida qoladi), lekin
+   ularning JS'i hero yuklanishiga xalaqit bermaydi. Bosh sahifadagi
+   birinchi ekranga faqat Hero va Header JS'i kerak. */
+const Advantages = dynamic(() =>
+  import("@/components/home/advantages").then((m) => m.Advantages),
+);
+const PartnersSection = dynamic(() =>
+  import("@/components/home/partners-section").then((m) => m.PartnersSection),
+);
+const ServicesSection = dynamic(() =>
+  import("@/components/home/services-section").then((m) => m.ServicesSection),
+);
+const VideoReviews = dynamic(() =>
+  import("@/components/home/video-reviews").then((m) => m.VideoReviews),
+);
+const ProcessSection = dynamic(() =>
+  import("@/components/home/process-section").then((m) => m.ProcessSection),
+);
+const CtaBand = dynamic(() =>
+  import("@/components/home/cta-band").then((m) => m.CtaBand),
+);
 
 export const revalidate = 300;
 
