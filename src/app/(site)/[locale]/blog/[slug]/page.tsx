@@ -9,6 +9,8 @@ import { getCategory } from "@/data/categories";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
+import { articleLd, breadcrumbLd, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHeader } from "@/components/catalog/page-header";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { ShareButtons } from "@/components/blog/share-buttons";
@@ -29,11 +31,15 @@ export async function generateMetadata({
   const a = getArticle(slug);
   if (!a) return {};
   const l = locale as Locale;
-  return {
+  return pageMetadata({
+    locale,
+    path: `/blog/${slug}`,
     title: t(a.title, l),
     description: t(a.excerpt, l),
-    openGraph: { images: [a.image], type: "article" },
-  };
+    images: [a.image],
+    type: "article",
+    publishedTime: a.date,
+  });
 }
 
 const fmtDate = (iso: string, locale: string) =>
@@ -61,6 +67,22 @@ export default async function ArticlePage({
 
   return (
     <>
+      <JsonLd
+        data={articleLd({
+          title: t(article.title, l),
+          description: t(article.excerpt, l),
+          image: article.image,
+          url: `/${l}/blog/${article.slug}`,
+          datePublished: article.date,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: tn("home"), url: `/${l}` },
+          { name: tn("blog"), url: `/${l}/blog` },
+          { name: t(article.title, l), url: `/${l}/blog/${article.slug}` },
+        ])}
+      />
       <PageHeader
         eyebrow={cat ? t(cat.name, l) : tn("blog")}
         title={t(article.title, l)}

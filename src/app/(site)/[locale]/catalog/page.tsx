@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { categories } from "@/data/categories";
 import { countsByCategory, listProducts } from "@/lib/repo";
@@ -18,7 +19,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "catalog" });
-  return { title: t("title"), description: t("subtitle") };
+  return pageMetadata({
+    locale,
+    path: "/catalog",
+    title: t("title"),
+    description: t("subtitle"),
+  });
 }
 
 export default async function CatalogPage({

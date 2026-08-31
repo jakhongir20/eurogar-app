@@ -186,6 +186,25 @@ klient `bun install` paytida (`postinstall`) avtomatik generatsiya bo'ladi.
 Natija: saytdagi har buyurtma/ariza guruhga tushadi; botga yozgan mijozga
 "Tez orada siz bilan bog'lanamiz" avto-javobi ketadi (guruh suhbatiga aralashmaydi).
 
+## SEO
+
+Tayyor: `sitemap.xml` (74 manzil, ikkala til, hreflang bilan), `robots.txt`,
+har sahifada kanonik havola va uz/ru hreflang, ijtimoiy tarmoq uchun
+avtomatik OG rasm, strukturaviy ma'lumotlar (Organization, 3 ta filial
+uchun LocalBusiness — manzil/koordinata/ish vaqti, Product, FAQPage,
+Article, BreadcrumbList).
+
+> **DIQQAT.** Domen ulanmaguncha indekslash ataylab O'CHIQ: sayt vaqtinchalik
+> `*.vercel.app` manzilida indekslansa, keyin `eurogar.uz` ga o'tganda ikki
+> nusxa kontent muammosi chiqadi. Domen tayyor bo'lgach Vercel'da
+> `NEXT_PUBLIC_SITE_URL=https://eurogar.uz` qo'ying va qayta deploy qiling —
+> indekslash, sitemap va kanonik havolalar o'zi to'g'ri manzilga o'tadi.
+> Bu o'zgaruvchi **build vaqtida** o'qiladi, shuning uchun redeploy shart.
+
+Domen ulangandan keyin: saytni [Yandex Webmaster](https://webmaster.yandex.ru)
+va [Google Search Console](https://search.google.com/search-console) ga qo'shib,
+`https://eurogar.uz/sitemap.xml` ni yuboring.
+
 ## Keyingi bosqichlar
 
 1. Mijoz sharhlari + admin moderatsiyasi (TZ 2.10 — baza tayyor)

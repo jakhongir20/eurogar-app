@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowUpRight, Clock3 } from "lucide-react";
@@ -17,7 +18,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const tb = await getTranslations({ locale, namespace: "blog" });
-  return { title: tb("title"), description: tb("subtitle") };
+  return pageMetadata({
+    locale,
+    path: "/blog",
+    title: tb("title"),
+    description: tb("subtitle"),
+  });
 }
 
 const fmtDate = (iso: string, locale: string) =>

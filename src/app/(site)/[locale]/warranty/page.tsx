@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import {
   CheckCircle2,
@@ -74,7 +75,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const tw = await getTranslations({ locale, namespace: "warranty" });
-  return { title: tw("title"), description: tw("subtitle") };
+  return pageMetadata({
+    locale,
+    path: "/warranty",
+    title: tw("title"),
+    description: tw("subtitle"),
+  });
 }
 
 export default async function WarrantyPage({

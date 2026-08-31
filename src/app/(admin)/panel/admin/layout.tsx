@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { fontVars } from "@/app/fonts";
 import { Providers } from "@/components/providers";
-import "../../globals.css";
+import "../../../globals.css";
 
 
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PageHeader } from "@/components/catalog/page-header";
 import { CalculatorView } from "@/components/calculator/calculator-view";
@@ -10,7 +11,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "calculator" });
-  return { title: t("title"), description: t("subtitle") };
+  return pageMetadata({
+    locale,
+    path: "/calculator",
+    title: t("title"),
+    description: t("subtitle"),
+  });
 }
 
 export default async function CalculatorPage({

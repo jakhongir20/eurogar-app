@@ -7,6 +7,8 @@ import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
+import { breadcrumbLd, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHeader } from "@/components/catalog/page-header";
 import { ProductGrid } from "@/components/catalog/product-grid";
 import { Chip } from "@/components/ui/badge";
@@ -27,10 +29,13 @@ export async function generateMetadata({
   const { locale, category } = await params;
   const c = getCategory(category);
   if (!c) return {};
-  return {
+  return pageMetadata({
+    locale,
+    path: `/catalog/${category}`,
     title: t(c.name, locale as Locale),
     description: t(c.short, locale as Locale),
-  };
+    images: [c.image],
+  });
 }
 
 export default async function CategoryPage({
@@ -51,6 +56,13 @@ export default async function CategoryPage({
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbLd([
+          { name: tn("home"), url: `/${l}` },
+          { name: tn("catalog"), url: `/${l}/catalog` },
+          { name: t(cat.name, l), url: `/${l}/catalog/${cat.slug}` },
+        ])}
+      />
       <PageHeader
         eyebrow={tn("catalog")}
         title={t(cat.name, l)}

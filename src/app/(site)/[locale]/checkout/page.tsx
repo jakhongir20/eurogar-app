@@ -10,7 +10,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "checkout" });
-  return { title: t("title") };
+  /* Savat/buyurtma — shaxsiy sahifalar, qidiruvga tushmasligi kerak */
+  return { title: t("title"), robots: { index: false, follow: false } };
 }
 
 export default async function CheckoutPage({

@@ -6,6 +6,8 @@ import { getProductBySlug, listProducts, productsByCategory } from "@/lib/repo";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
+import { breadcrumbLd, pageMetadata, productLd } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHeader } from "@/components/catalog/page-header";
 import { ProductView } from "@/components/product/product-view";
 import { ProductCard } from "@/components/catalog/product-card";
@@ -29,11 +31,13 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const p = await getProductBySlug(slug);
   if (!p) return {};
-  return {
+  return pageMetadata({
+    locale,
+    path: `/product/${slug}`,
     title: t(p.name, locale as Locale),
     description: t(p.description, locale as Locale).slice(0, 160),
-    openGraph: { images: [p.images[0]] },
-  };
+    images: p.images.slice(0, 1),
+  });
 }
 
 export default async function ProductPage({
@@ -56,8 +60,27 @@ export default async function ProductPage({
   const tp = await getTranslations("product");
   const l = locale as Locale;
 
+  const crumbs = [
+    { name: tn("home"), url: `/${l}` },
+    { name: tn("catalog"), url: `/${l}/catalog` },
+    ...(cat ? [{ name: t(cat.name, l), url: `/${l}/catalog/${cat.slug}` }] : []),
+    { name: t(product.name, l), url: `/${l}/product/${product.slug}` },
+  ];
+
   return (
     <>
+      <JsonLd
+        data={productLd({
+          name: t(product.name, l),
+          description: t(product.description, l),
+          image: product.images[0] ?? "",
+          url: `/${l}/product/${product.slug}`,
+          price: product.price,
+          inStock: product.stock > 0,
+          sku: product.id,
+        })}
+      />
+      <JsonLd data={breadcrumbLd(crumbs)} />
       <PageHeader
         eyebrow={cat ? t(cat.name, l) : undefined}
         title={t(product.name, l)}
