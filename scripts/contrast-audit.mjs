@@ -21,7 +21,7 @@ const PAGES = [
   "/uz/cart",
   "/uz/privacy",
   "/ru",
-  "/admin/login",
+  "/panel/admin/login",
 ];
 
 const AUDIT = () => {

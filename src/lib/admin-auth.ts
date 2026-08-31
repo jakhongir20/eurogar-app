@@ -12,6 +12,17 @@
 
 export const ADMIN_COOKIE = "eg_admin";
 
+/**
+ * Admin panel manzili. Ataylab `/admin` emas — bu manzilni botlar va
+ * qiziquvchilar birinchi navbatda sinab ko'rishadi. Bu himoya emas (asosiy
+ * himoya — parol va HMAC token), lekin ortiqcha e'tibordan xoli qiladi.
+ *
+ * O'zgartirilsa: shu qatorni va `src/app/(admin)/panel/` papka nomini
+ * birga o'zgartiring — Next.js marshrutlari papka nomidan olinadi.
+ */
+export const ADMIN_BASE = "/panel/admin";
+export const ADMIN_LOGIN = `${ADMIN_BASE}/login`;
+
 /** Ochiq repoda «yonib ketgan» parollar — qabul qilinmaydi */
 const LEAKED = new Set(["eurogar2026", "admin", "password", "12345678"]);
 

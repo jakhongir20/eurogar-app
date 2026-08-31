@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { LogIn } from "lucide-react";
+import { ADMIN_BASE } from "@/lib/admin-auth";
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/field";
@@ -39,7 +40,7 @@ export default function AdminLoginPage() {
       }
       return;
     }
-    router.replace("/admin");
+    router.replace(ADMIN_BASE);
     router.refresh();
   };
 

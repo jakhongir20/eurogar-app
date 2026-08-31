@@ -1,7 +1,7 @@
 # EUROGAR — internet-do'kon + admin panel
 
 Monolit Next.js ilova: korporativ sayt, mahsulot katalogi, savat, buyurtma formasi,
-narx kalkulyatori va `/admin` boshqaruv paneli. Ikki til: **o'zbekcha / ruscha**.
+narx kalkulyatori va `/panel/admin` boshqaruv paneli. Ikki til: **o'zbekcha / ruscha**.
 
 > Ma'lumotlar qatlami ikki rejimda ishlaydi (`src/lib/repo.ts`):
 > **DATABASE_URL berilsa — PostgreSQL** (Prisma 7, doimiy saqlash),
@@ -50,12 +50,22 @@ npm run start
 | `/cart`, `/checkout` | Savat va buyurtma formasi |
 | `/calculator` | Narx kalkulyatori |
 | `/about`, `/contact`, `/privacy` | Statik sahifalar |
-| `/admin` | Admin panel (parol bilan) |
+| `/panel/admin` | Admin panel (parol bilan) |
 
 ## Admin panel
 
-`/admin` — parol so'raladi. Demo parol: **`eurogar2026`**
-(prod'da `.env.local` dagi `ADMIN_PASSWORD` bilan almashtiriladi).
+`/panel/admin` — parol so'raladi.
+
+Manzil ataylab `/admin` emas: uni botlar va qiziquvchilar birinchi bo'lib
+sinab ko'rishadi. Bu himoya emas — asosiy himoya `ADMIN_PASSWORD` va HMAC
+sessiya tokeni — lekin ortiqcha e'tibordan xoli qiladi. Yo'l
+[`src/lib/admin-auth.ts`](src/lib/admin-auth.ts) dagi `ADMIN_BASE`
+konstantasida; o'zgartirsangiz `src/app/(admin)/panel/` papkasini ham
+birga nomlang.
+
+Parol **majburiy**: `ADMIN_PASSWORD` qo'yilmasa yoki 8 belgidan qisqa
+bo'lsa, panel umuman ochilmaydi. `eurogar2026` kabi ochiq parollar
+ro'yxatga kiritilgan va qabul qilinmaydi.
 
 Imkoniyatlar:
 
@@ -133,7 +143,7 @@ Real fotolar kelganda shu nomlar bilan almashtiriladi yoki admin paneldan yuklan
 src/
   app/
     (site)/[locale]/     — ommaviy sayt (uz/ru)
-    (admin)/admin/       — admin panel
+    (admin)/panel/admin/ — admin panel (/panel/admin)
     api/                 — lead, order, admin API
   components/
     ui/                  — Button, Input, Reveal, Counter, ...

@@ -24,7 +24,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/admin/", "/api/", "/*/checkout", "/*/cart"],
+        /* Admin panel manzili ataylab yozilmagan: robots.txt ochiq fayl,
+           unga yo'lni yozish uni oshkor qilish bilan teng. Panel baribir
+           indekslanmaydi — layout'ida `robots: { index: false }` turibdi. */
+        disallow: ["/api/", "/*/checkout", "/*/cart"],
       },
     ],
     sitemap: `${base}/sitemap.xml`,

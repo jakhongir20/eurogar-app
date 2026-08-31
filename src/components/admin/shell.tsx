@@ -15,14 +15,15 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ADMIN_BASE, ADMIN_LOGIN } from "@/lib/admin-auth";
 import { Logo } from "@/components/layout/logo";
 
 const NAV = [
-  { href: "/admin", label: "Boshqaruv paneli", Icon: LayoutDashboard, exact: true },
-  { href: "/admin/products", label: "Mahsulotlar", Icon: Package },
-  { href: "/admin/orders", label: "Buyurtmalar", Icon: ShoppingCart },
-  { href: "/admin/leads", label: "Arizalar", Icon: Send },
-  { href: "/admin/reviews", label: "Sharhlar", Icon: Star },
+  { href: ADMIN_BASE, label: "Boshqaruv paneli", Icon: LayoutDashboard, exact: true },
+  { href: `${ADMIN_BASE}/products`, label: "Mahsulotlar", Icon: Package },
+  { href: `${ADMIN_BASE}/orders`, label: "Buyurtmalar", Icon: ShoppingCart },
+  { href: `${ADMIN_BASE}/leads`, label: "Arizalar", Icon: Send },
+  { href: `${ADMIN_BASE}/reviews`, label: "Sharhlar", Icon: Star },
 ];
 
 export function AdminShell({
@@ -40,7 +41,7 @@ export function AdminShell({
 
   const logout = async () => {
     await fetch("/api/admin/auth", { method: "DELETE" });
-    router.replace("/admin/login");
+    router.replace(ADMIN_LOGIN);
     router.refresh();
   };
 
@@ -72,7 +73,7 @@ export function AdminShell({
     <div className="flex min-h-dvh">
       {/* ── sidebar (desktop) ── */}
       <aside className="dark-section sticky top-0 hidden h-dvh w-64 shrink-0 flex-col bg-ink-950 p-4 lg:flex">
-        <Link href="/admin" className="px-2 py-3">
+        <Link href={ADMIN_BASE} className="px-2 py-3">
           <Logo tone="dark" />
           <div className="mt-1 text-[10.5px] font-bold tracking-[0.22em] text-brand-400 uppercase">
             Admin panel

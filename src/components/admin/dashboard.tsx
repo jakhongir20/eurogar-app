@@ -15,6 +15,7 @@ import {
 import type { Order } from "@/lib/types";
 import type { Lead } from "@/lib/store";
 import { cn, formatCompact, formatPrice } from "@/lib/utils";
+import { ADMIN_BASE } from "@/lib/admin-auth";
 import { AdminShell } from "./shell";
 import { STATUS_STYLES, STATUS_LABEL } from "./order-status";
 
@@ -123,7 +124,7 @@ export function AdminDashboard() {
       <div className="mt-3 grid gap-3 lg:grid-cols-2">
         <Panel
           title="Oxirgi buyurtmalar"
-          href="/admin/orders"
+          href={`${ADMIN_BASE}/orders`}
           empty={orders.length === 0}
           emptyText="Hozircha buyurtma yo'q. Saytdan test buyurtma bering — shu yerda paydo bo'ladi."
         >
@@ -159,7 +160,7 @@ export function AdminDashboard() {
 
         <Panel
           title="Oxirgi arizalar"
-          href="/admin/leads"
+          href={`${ADMIN_BASE}/leads`}
           empty={leads.length === 0}
           emptyText="Hozircha ariza yo'q. Kalkulyator yoki aloqa formasidan test yuboring."
         >

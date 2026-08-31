@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { addReview } from "@/lib/repo";
 import { checkRateLimit, isBot } from "@/lib/rate-limit";
 import { escapeHtml, sendTelegram } from "@/lib/telegram";
+import { ADMIN_BASE } from "@/lib/admin-auth";
 
 /** TZ 2.10: sharh yuboriladi → moderatsiyaga tushadi (admin tasdiqlagach saytda chiqadi) */
 export async function POST(req: Request) {
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
       (review.phone ? `\n📞 ${escapeHtml(review.phone)}` : "") +
       `\n${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}\n\n` +
       `«${escapeHtml(review.text)}»\n\n` +
-      `Tasdiqlash: /admin/reviews`,
+      `Tasdiqlash: ${ADMIN_BASE}/reviews`,
   );
 
   return NextResponse.json({ ok: true, id: review.id });
