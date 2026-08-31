@@ -24,6 +24,10 @@ const VideoReviews = dynamic(() =>
 const ProcessSection = dynamic(() =>
   import("@/components/home/process-section").then((m) => m.ProcessSection),
 );
+/* Leaflet'ni tortadi — alohida chunk'da, ekran ostida yuklanadi */
+const ShowroomsSection = dynamic(() =>
+  import("@/components/home/showrooms-section").then((m) => m.ShowroomsSection),
+);
 const CtaBand = dynamic(() =>
   import("@/components/home/cta-band").then((m) => m.CtaBand),
 );
@@ -49,6 +53,7 @@ export default async function HomePage({
       <FeaturedSection />
       <VideoReviews textReviews={reviews} />
       <ProcessSection />
+      <ShowroomsSection />
       <CtaBand />
     </>
   );

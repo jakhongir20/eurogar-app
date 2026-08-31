@@ -313,6 +313,11 @@
     "openMap": "Xaritada ochish",
     "call": "Qo'ng'iroq qilish"
   },
+  "showrooms": {
+    "eyebrow": "Shou-rumlar",
+    "title": "Firmali shou-rumlar",
+    "subtitle": "Uch shaharda o'z shou-rumlarimiz bor — mahsulotni jonli ko'rish, o'lchov va maslahat uchun keling."
+  },
   "services": {
     "eyebrow": "Xizmatlar",
     "title": "To'liq sikl — bitta jamoadan",

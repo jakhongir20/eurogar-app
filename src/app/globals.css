@@ -404,6 +404,18 @@
   display: block;
 }
 
+/* Tanlanmagan shou-rum pini — kichikroq va bosiqroq */
+.eg-pin--idle {
+  transform: scale(0.82);
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 6px 9px rgb(8 48 63 / 0.25));
+  transition: transform 0.3s ease;
+}
+
+.eg-pin--idle:hover {
+  transform: scale(0.92);
+}
+
 .eg-pin__pulse {
   position: absolute;
   top: 100%;
