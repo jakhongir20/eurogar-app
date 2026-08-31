@@ -21,7 +21,24 @@
       "Bash(grep -rn '\"/admin\\\\|`/admin\\\\|href=\"/admin\\\\|pathname === \"/admin' src --include=\"*.ts\" --include=\"*.tsx\")",
       "Bash(git ls-tree *)",
       "Bash(grep -rn '\"/admin\\\\|`/admin\\\\|href=\"/admin' src --include=\"*.ts\" --include=\"*.tsx\")",
-      "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"Admin panel /admin dan /panel/admin ga ko'chirildi: yo'l ADMIN_BASE konstantasida, proxy/nav/redirect'lar shundan oladi; robots.txt'ga yozilmadi \\(u ochiq fayl — yo'lni oshkor qilardi\\)\")"
+      "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"Admin panel /admin dan /panel/admin ga ko'chirildi: yo'l ADMIN_BASE konstantasida, proxy/nav/redirect'lar shundan oladi; robots.txt'ga yozilmadi \\(u ochiq fayl — yo'lni oshkor qilardi\\)\")",
+      "Bash(perl -pi -e 's{import \\\\{ Input, PhonePrefix, Select \\\\} from \"\\\\@/components/ui/field\";}{import { Input, PhoneInput, Select } from \"\\\\@/components/ui/field\";}; s{import \\\\{ Input, PhonePrefix, Textarea \\\\} from \"\\\\@/components/ui/field\";}{import { Input, PhoneInput, Textarea } from \"\\\\@/components/ui/field\";}' src/components/calculator/calculator-view.tsx src/components/home/text-reviews.tsx)",
+      "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"PhoneInput refaktoringi qayta tiklandi: 5 ta formada PhonePrefix o'rniga PhoneInput \\(parallel tahrirda bekor bo'lib, field.tsx'da mavjud bo'lmagan eksportga murojaat qolgan edi — build buziladigan holat\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(perl -0pi -e 's{      L\\\\.tileLayer\\\\\\(TILES, \\\\{}{      L.tileLayer\\(MAP_TILES, {}; s{        \\\\.addAttribution\\\\\\(\\\\n          .*?\\\\n        \\\\\\)}{        .addAttribution\\(MAP_ATTRIBUTION\\)}s; s{        html: `<span class=\"eg-pin\"><span class=\"eg-pin__pulse\"></span>\\\\$\\\\{PIN_SVG\\\\}</span>`,}{        html: activePinHtml\\(\\),}' src/components/ui/branch-map.tsx)",
+      "Bash(curl -sS --max-time 60 http://localhost:3001/uz)",
+      "Bash(grep -oE 'id=\"showrooms\"|<section[^>]{0,80}')",
+      "Bash(curl -sS --max-time 90 -H 'Cache-Control: no-cache' http://localhost:3001/uz?nocache=__TRACKED_VAR__)",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" --max-time 90 http://localhost:3001/uz)",
+      "Bash(curl -sS -o /dev/null -w 'stash bilan: %{http_code}\\\\n' --max-time 90 http://localhost:3001/uz?x=__TRACKED_VAR__)",
+      "Bash(curl -sS --max-time 90 http://localhost:3001/uz?y=__TRACKED_VAR__)",
+      "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"Bosh sahifada «Firmali shou-rumlar» bo'limi: barcha filiallar bitta katta Leaflet xaritasida, shahar tugmalari va pin bosilganda flyTo bilan uchadi; pin/plitka uslublari map-style.ts ga chiqarildi \\(BranchMap ham shundan oladi\\)\")",
+      "Bash(node /private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad/diag.mjs)",
+      "Bash(node /private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad/prodmap.mjs)",
+      "Bash(S=/private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad node /private/tmp/claude-501/-Users-macbook-WebstormProjects-eurogar-app/61b026e3-1645-4c93-9781-a7666bfb3856/scratchpad/pan.mjs)",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code} %{content_type} %{size_download} bayt\\\\n\" --max-time 20 \"https://a.basemaps.cartocdn.com/light_all/12/2734/1536.png\")",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code} %{content_type} %{size_download} bayt\\\\n\" --max-time 20 -H \"User-Agent: eurogar.uz map test\" \"https://tile.openstreetmap.org/12/2734/1536.png\")",
+      "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"Claude Code: sessiyada to'plangan Bash ruxsatlari\")"
     ]
   }
 }
