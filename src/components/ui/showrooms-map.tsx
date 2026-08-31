@@ -40,6 +40,7 @@ export function ShowroomsMap({
   const ref = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const markersRef = useRef<Record<string, Marker>>({});
+  const roRef = useRef<ResizeObserver | null>(null);
   const iconsRef = useRef<{ active?: unknown; idle?: unknown }>({});
 
   /* onSelect'ni ref'da saqlaymiz — o'zgarishi xaritani qayta qurmasin */
@@ -102,12 +103,20 @@ export function ShowroomsMap({
         markersRef.current[p.id] = m;
       }
 
-      // Reveal-animatsiyadan keyin o'lchamni qayta hisoblash
-      setTimeout(() => map.invalidateSize(), 350);
+      /* O'ram o'lchami o'zgarganda (reveal animatsiyasi, breakpoint, shrift
+         yuklanishi) Leaflet o'zi bilmaydi — kuzatib turamiz, aks holda
+         plitkalar yetishmay xarita yarim bo'sh qoladi. */
+      const ro = new ResizeObserver(() => map.invalidateSize({ pan: false }));
+      ro.observe(ref.current);
+      roRef.current = ro;
+
+      setTimeout(() => map.invalidateSize({ pan: false }), 350);
     })();
 
     return () => {
       cancelled = true;
+      roRef.current?.disconnect();
+      roRef.current = null;
       mapRef.current?.remove();
       mapRef.current = null;
       markersRef.current = {};

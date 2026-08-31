@@ -80,12 +80,17 @@ export function ShowroomsSection() {
         {/* ── xarita + tanlangan filial kartasi ── */}
         <Reveal delay={0.1}>
           <div className="relative mt-5 overflow-hidden rounded-[2rem] border border-bone-300 bg-bone-200">
-            <ShowroomsMap
-              points={points}
-              activeId={activeId}
-              onSelect={setActiveId}
-              className="h-[340px] w-full md:h-[520px]"
-            />
+            {/* Balandlik o'ramda: globals.css'dagi `.leaflet-container{height:100%}`
+                qatlamsiz qoida bo'lgani uchun utilita klasslaridan kuchliroq —
+                xaritaning o'ziga balandlik berib bo'lmaydi. */}
+            <div className="relative h-[340px] w-full md:h-[520px]">
+              <ShowroomsMap
+                points={points}
+                activeId={activeId}
+                onSelect={setActiveId}
+                className="absolute inset-0"
+              />
+            </div>
 
             {/* mobil'da xarita ostida, kattaroq ekranda ustida suzadi */}
             <div className="z-[1002] border-t border-bone-300 bg-white p-5 md:absolute md:top-5 md:left-5 md:w-[19.5rem] md:rounded-2xl md:border md:p-6 md:shadow-[0_26px_54px_-26px_rgba(11,74,99,.45)]">
