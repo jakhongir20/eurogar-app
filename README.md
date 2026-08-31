@@ -1,7 +1,7 @@
 # EUROGAR — internet-do'kon + admin panel
 
 Monolit Next.js ilova: korporativ sayt, mahsulot katalogi, savat, buyurtma formasi,
-narx kalkulyatori va `/panel/admin` boshqaruv paneli. Ikki til: **o'zbekcha / ruscha**.
+narx kalkulyatori va `/admin` boshqaruv paneli. Ikki til: **o'zbekcha / ruscha**.
 
 > Ma'lumotlar qatlami ikki rejimda ishlaydi (`src/lib/repo.ts`):
 > **DATABASE_URL berilsa — PostgreSQL** (Prisma 7, doimiy saqlash),
@@ -50,22 +50,12 @@ npm run start
 | `/cart`, `/checkout` | Savat va buyurtma formasi |
 | `/calculator` | Narx kalkulyatori |
 | `/about`, `/contact`, `/privacy` | Statik sahifalar |
-| `/panel/admin` | Admin panel (parol bilan) |
+| `/admin` | Admin panel (parol bilan) |
 
 ## Admin panel
 
-`/panel/admin` — parol so'raladi.
-
-Manzil ataylab `/admin` emas: uni botlar va qiziquvchilar birinchi bo'lib
-sinab ko'rishadi. Bu himoya emas — asosiy himoya `ADMIN_PASSWORD` va HMAC
-sessiya tokeni — lekin ortiqcha e'tibordan xoli qiladi. Yo'l
-[`src/lib/admin-auth.ts`](src/lib/admin-auth.ts) dagi `ADMIN_BASE`
-konstantasida; o'zgartirsangiz `src/app/(admin)/panel/` papkasini ham
-birga nomlang.
-
-Parol **majburiy**: `ADMIN_PASSWORD` qo'yilmasa yoki 8 belgidan qisqa
-bo'lsa, panel umuman ochilmaydi. `eurogar2026` kabi ochiq parollar
-ro'yxatga kiritilgan va qabul qilinmaydi.
+`/admin` — parol so'raladi. Demo parol: **`eurogar2026`**
+(prod'da `.env.local` dagi `ADMIN_PASSWORD` bilan almashtiriladi).
 
 Imkoniyatlar:
 
@@ -143,7 +133,7 @@ Real fotolar kelganda shu nomlar bilan almashtiriladi yoki admin paneldan yuklan
 src/
   app/
     (site)/[locale]/     — ommaviy sayt (uz/ru)
-    (admin)/panel/admin/ — admin panel (/panel/admin)
+    (admin)/admin/       — admin panel
     api/                 — lead, order, admin API
   components/
     ui/                  — Button, Input, Reveal, Counter, ...
@@ -214,6 +204,29 @@ Article, BreadcrumbList).
 Domen ulangandan keyin: saytni [Yandex Webmaster](https://webmaster.yandex.ru)
 va [Google Search Console](https://search.google.com/search-console) ga qo'shib,
 `https://eurogar.uz/sitemap.xml` ni yuboring.
+
+## Analitika (Yandex Metrika)
+
+1. [metrika.yandex.ru](https://metrika.yandex.ru) da hisoblagich yarating
+   (sayt manzili — hozircha Vercel manzili, domen ulangach o'zgartiriladi).
+2. Hisoblagich raqamini `NEXT_PUBLIC_YANDEX_METRIKA_ID` ga yozing:
+   `.env.local` ga ham, Vercel env ga ham. Redeploy qiling
+   (bu o'zgaruvchi build vaqtida o'qiladi).
+3. Metrika kabinetida **Настройки → Цели → JavaScript-событие** orqali
+   quyidagi maqsadlarni yarating (identifikator aynan shunday bo'lsin):
+
+   | Identifikator | Nima hisoblanadi |
+   |---|---|
+   | `lead_submit` | Ariza yuborildi (qo'ng'iroq, aloqa, kalkulyator) |
+   | `order_submit` | Savatdan buyurtma rasmiylashtirildi |
+   | `review_submit` | Sharh qoldirildi |
+   | `phone_click` | Telefon raqamiga bosildi |
+   | `telegram_click` | Telegram'ga o'tildi |
+   | `social_click` | Instagram / Facebook / YouTube |
+
+Maqsadlar orqali qaysi sahifa va qaysi manba haqiqiy ariza keltirayotganini
+ko'rasiz. Vebvizor (sessiya yozuvi) yoqilgan — Metrika forma maydonlarini
+avtomatik yashiradi, lekin xohlasangiz kabinetdan o'chirib qo'yish mumkin.
 
 ## Keyingi bosqichlar
 

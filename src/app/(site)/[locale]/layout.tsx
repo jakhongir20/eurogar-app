@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -9,6 +10,7 @@ import { alternatesFor, organizationLd, robotsPolicy } from "@/lib/seo";
 import { branches, site } from "@/lib/site";
 import { t as tr } from "@/lib/utils";
 import { JsonLd } from "@/components/seo/json-ld";
+import { YandexMetrika } from "@/components/analytics/yandex-metrika";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -105,6 +107,10 @@ export default async function LocaleLayout({
           </Providers>
         </NextIntlClientProvider>
         <JsonLd data={orgLd} />
+        {/* useSearchParams Suspense ichida bo'lishi shart */}
+        <Suspense fallback={null}>
+          <YandexMetrika />
+        </Suspense>
       </body>
     </html>
   );

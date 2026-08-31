@@ -6,8 +6,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { Check, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useHoneypot } from "@/components/ui/honeypot";
+import { GOALS, trackGoal } from "@/lib/analytics";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
-import { Input, PhoneInput } from "@/components/ui/field";
+import { Input, PhonePrefix } from "@/components/ui/field";
 import { useLeadMutation, type LeadPayload } from "@/lib/api";
 import { cn, formatPhone, isValidPhone, phoneDigits } from "@/lib/utils";
 
@@ -43,13 +44,16 @@ export function LeadForm({
     setErrors(next);
     if (Object.keys(next).length) return;
 
-    mutation.mutate({
-      name: name.trim(),
-      phone: `+998${phoneDigits(phone)}`,
-      source,
-      meta,
-      [HONEYPOT_FIELD]: hp.value,
-    });
+    mutation.mutate(
+      {
+        name: name.trim(),
+        phone: `+998${phoneDigits(phone)}`,
+        source,
+        meta,
+        [HONEYPOT_FIELD]: hp.value,
+      },
+      { onSuccess: () => trackGoal(GOALS.lead, { manba: source }) },
+    );
   };
 
   if (mutation.isSuccess) {
@@ -118,16 +122,22 @@ export function LeadForm({
         wrapClassName={layout === "row" ? "sm:flex-1" : undefined}
       />
 
-      <PhoneInput
-        tone={tone}
-        wrapClassName={layout === "row" ? "sm:flex-1" : undefined}
-        value={formatPhone(phone).replace("+998 ", "")}
-        onChange={(e) => {
-          setPhone(e.target.value);
-          if (errors.phone) setErrors((s) => ({ ...s, phone: undefined }));
-        }}
-        error={errors.phone}
-      />
+      <div className={cn("relative", layout === "row" && "sm:flex-1")}>
+        <Input
+          tone={tone}
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="90 123 45 67"
+          className="pl-[4.4rem] font-medium tracking-wide"
+          value={formatPhone(phone).replace("+998 ", "")}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            if (errors.phone) setErrors((s) => ({ ...s, phone: undefined }));
+          }}
+          error={errors.phone}
+        />
+        <PhonePrefix tone={tone} />
+      </div>
 
       <Button
         type="submit"

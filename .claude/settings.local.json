@@ -15,7 +15,13 @@
       "Bash(node -e \"console.log\\('sharp:', require.resolve\\('sharp'\\)\\)\")",
       "Bash(git status *)",
       "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"Favicon EUROGAR logotipiga almashtirildi \\(icon.svg + apple-icon + ico, public dublikati o'chirildi\\); +998 prefiksi input ichiga ko'chdi — xato matni chiqqanda pastga tushmaydi; barcha telefon maydonlari PhoneInput'ga birlashtirildi\")",
-      "Bash(grep -rn '\"/admin\\\\|`/admin\\\\|/admin/' src --include=\"*.ts\" --include=\"*.tsx\")"
+      "Bash(grep -rn '\"/admin\\\\|`/admin\\\\|/admin/' src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(perl -pi -e 's{href=\"/admin/orders\"}{href={`\\\\$\\\\{ADMIN_BASE\\\\}/orders`}}g; s{href=\"/admin/leads\"}{href={`\\\\$\\\\{ADMIN_BASE\\\\}/leads`}}g;' src/components/admin/dashboard.tsx)",
+      "Bash(perl -pi -e 's{\"/admin/login\"}{\"/panel/admin/login\"}' scripts/contrast-audit.mjs)",
+      "Bash(grep -rn '\"/admin\\\\|`/admin\\\\|href=\"/admin\\\\|pathname === \"/admin' src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(git ls-tree *)",
+      "Bash(grep -rn '\"/admin\\\\|`/admin\\\\|href=\"/admin' src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(git -c user.name=jakhongir20 -c user.email=b.o.jakhongir@gmail.com commit -q -m \"Admin panel /admin dan /panel/admin ga ko'chirildi: yo'l ADMIN_BASE konstantasida, proxy/nav/redirect'lar shundan oladi; robots.txt'ga yozilmadi \\(u ochiq fayl — yo'lni oshkor qilardi\\)\")"
     ]
   }
 }

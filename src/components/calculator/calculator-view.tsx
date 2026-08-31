@@ -22,7 +22,10 @@ import {
   t as tr,
 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input, PhoneInput, Select } from "@/components/ui/field";
+import { useHoneypot } from "@/components/ui/honeypot";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
+import { GOALS, trackGoal } from "@/lib/analytics";
+import { Input, PhonePrefix, Select } from "@/components/ui/field";
 
 export function CalculatorView() {
   const locale = useLocale() as Locale;
@@ -46,6 +49,7 @@ export function CalculatorView() {
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const mutation = useLeadMutation();
+  const hp = useHoneypot();
 
   const pickType = (id: string) => {
     const t = getCalcType(id)!;
@@ -108,6 +112,14 @@ export function CalculatorView() {
         Soni: state.qty,
         "Taxminiy narx": formatPrice(result.total, "uz"),
       },
+      [HONEYPOT_FIELD]: hp.value,
+    }, {
+      onSuccess: () =>
+        trackGoal(GOALS.lead, {
+          manba: "calculator",
+          tur: tr(type.label, "uz"),
+          narx: result.total,
+        }),
     });
   };
 
@@ -360,6 +372,7 @@ export function CalculatorView() {
                 </motion.div>
               ) : (
                 <form onSubmit={submit} noValidate className="space-y-3">
+                  {hp.field}
                   <div className="flex items-center gap-2 text-[13.5px] font-bold text-white">
                     <Sparkles className="size-4 text-brand-400" strokeWidth={2.4} />
                     {tcalc("leaveRequest")}
@@ -377,16 +390,23 @@ export function CalculatorView() {
                     autoComplete="name"
                   />
 
-                  <PhoneInput
-                    tone="dark"
-                    value={formatPhone(phone).replace("+998 ", "")}
-                    onChange={(e) => {
-                      setPhone(e.target.value);
-                      if (errors.phone)
-                        setErrors((s) => ({ ...s, phone: undefined }));
-                    }}
-                    error={errors.phone}
-                  />
+                  <div className="relative">
+                    <Input
+                      tone="dark"
+                      inputMode="tel"
+                      autoComplete="tel"
+                      placeholder="90 123 45 67"
+                      className="pl-[4.4rem] font-medium tracking-wide"
+                      value={formatPhone(phone).replace("+998 ", "")}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                        if (errors.phone)
+                          setErrors((s) => ({ ...s, phone: undefined }));
+                      }}
+                      error={errors.phone}
+                    />
+                    <PhonePrefix tone="dark" />
+                  </div>
 
                   <Button
                     type="submit"
