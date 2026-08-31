@@ -17,6 +17,8 @@ import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
 import type { Locale, Review } from "@/lib/types";
 import { cn, formatPhone, isValidPhone } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useHoneypot } from "@/components/ui/honeypot";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import { Input, PhonePrefix, Textarea } from "@/components/ui/field";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 
@@ -159,6 +161,7 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
   const [text, setText] = useState("");
   const [errors, setErrors] = useState<{ name?: string; phone?: string; text?: string }>({});
   const mutation = useReviewMutation();
+  const hp = useHoneypot();
 
   useEffect(() => {
     lockScroll();
@@ -183,6 +186,7 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
       phone: phone.trim() ? formatPhone(phone) : "",
       rating,
       text: text.trim(),
+      [HONEYPOT_FIELD]: hp.value,
     });
   };
 
@@ -239,6 +243,7 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
             </p>
 
             <form onSubmit={submit} className="mt-5 space-y-3.5" noValidate>
+              {hp.field}
               {/* baho */}
               <div>
                 <div className="mb-1.5 text-[12.5px] font-semibold text-muted">

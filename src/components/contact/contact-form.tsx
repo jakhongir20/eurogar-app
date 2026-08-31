@@ -12,6 +12,8 @@ import {
   phoneDigits,
 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useHoneypot } from "@/components/ui/honeypot";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import { Input, PhonePrefix, Select, Textarea } from "@/components/ui/field";
 
 export function ContactForm() {
@@ -26,6 +28,7 @@ export function ContactForm() {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const mutation = useLeadMutation();
+  const hp = useHoneypot();
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -41,6 +44,7 @@ export function ContactForm() {
       note: message.trim(),
       source: "contact",
       meta: region ? { Viloyat: treg(region) } : undefined,
+      [HONEYPOT_FIELD]: hp.value,
     });
   };
 
@@ -74,6 +78,7 @@ export function ContactForm() {
       noValidate
       className="rounded-[2rem] border border-bone-300 bg-white p-6 md:p-8"
     >
+      {hp.field}
       <h2 className="font-display text-[19px] font-extrabold text-graphite">
         {tcon("formTitle")}
       </h2>

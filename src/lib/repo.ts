@@ -33,6 +33,9 @@ const g = globalThis as unknown as {
   __egSeeded?: Promise<void>;
 };
 
+/** Boshqa modullar uchun (masalan rate-limit) ochiq klient */
+export const prisma = () => db();
+
 async function db(): Promise<PrismaClientT> {
   if (!g.__egPrisma) {
     const [{ PrismaClient }, { PrismaPg }] = await Promise.all([

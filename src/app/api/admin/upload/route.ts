@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp from "sharp";
-import { ADMIN_COOKIE, adminToken } from "@/lib/admin-auth";
+import { ADMIN_COOKIE, verifyAdminToken } from "@/lib/admin-auth";
 
 /**
  * Saqlash joyi:
@@ -51,7 +51,7 @@ const MIN_SOURCE_W = 1200;
 
 export async function POST(req: Request) {
   const c = await cookies();
-  if (c.get(ADMIN_COOKIE)?.value !== adminToken())
+  if (!(await verifyAdminToken(c.get(ADMIN_COOKIE)?.value)))
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
   const form = await req.formData().catch(() => null);

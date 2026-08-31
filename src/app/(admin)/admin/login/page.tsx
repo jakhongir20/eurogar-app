@@ -25,7 +25,18 @@ export default function AdminLoginPage() {
     });
     setLoading(false);
     if (!res.ok) {
-      setError("Parol noto'g'ri");
+      const data = await res.json().catch(() => null);
+      if (res.status === 429) {
+        setError("Juda ko'p urinish. 15 daqiqadan keyin qayta urinib ko'ring.");
+      } else if (data?.error === "not_configured") {
+        setError(
+          data.reason === "leaked"
+            ? "ADMIN_PASSWORD standart (ochiq) parolga qo'yilgan. Uni Vercel'da boshqa parolga almashtiring."
+            : "ADMIN_PASSWORD sozlanmagan. Vercel → Environment Variables'da kamida 8 belgili parol qo'ying va redeploy qiling.",
+        );
+      } else {
+        setError("Parol noto'g'ri");
+      }
       return;
     }
     router.replace("/admin");

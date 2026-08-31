@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addReview } from "@/lib/repo";
+import { checkRateLimit, isBot } from "@/lib/rate-limit";
 import { escapeHtml, sendTelegram } from "@/lib/telegram";
 
 /** TZ 2.10: sharh yuboriladi → moderatsiyaga tushadi (admin tasdiqlagach saytda chiqadi) */
@@ -11,6 +12,16 @@ export async function POST(req: Request) {
 
   if (!name || text.length < 10) {
     return NextResponse.json({ error: "invalid_body" }, { status: 400 });
+  }
+
+  if (isBot(body)) return NextResponse.json({ ok: true, id: "" });
+
+  const limit = await checkRateLimit(req, "review");
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "too_many_requests" },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } },
+    );
   }
 
   const review = await addReview({

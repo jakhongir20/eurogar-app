@@ -18,6 +18,8 @@ import {
   t as tr,
 } from "@/lib/utils";
 import { Button, ButtonShell } from "@/components/ui/button";
+import { useHoneypot } from "@/components/ui/honeypot";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import { Input, PhonePrefix, Textarea } from "@/components/ui/field";
 
 export function CheckoutView() {
@@ -34,6 +36,7 @@ export function CheckoutView() {
   const [code, setCode] = useState<string | null>(null);
 
   const mutation = useOrderMutation();
+  const hp = useHoneypot();
   const total = cartTotal(lines);
 
   const submit = (e: FormEvent) => {
@@ -50,6 +53,7 @@ export function CheckoutView() {
         phone: `+998${phoneDigits(phone)}`,
         note: note.trim(),
         items: lines.map((l) => ({ name: l.name, qty: l.qty, price: l.price })),
+        [HONEYPOT_FIELD]: hp.value,
       },
       {
         onSuccess: (res) => {
@@ -133,6 +137,7 @@ export function CheckoutView() {
         noValidate
         className="rounded-[2rem] border border-bone-300 bg-white p-6 md:p-8 lg:col-span-3"
       >
+        {hp.field}
         <h2 className="font-display text-[20px] font-extrabold text-graphite">
           {tch("title")}
         </h2>

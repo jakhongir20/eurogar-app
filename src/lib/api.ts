@@ -2,6 +2,10 @@
 
 import { useMutation } from "@tanstack/react-query";
 import type { CartLine } from "./types";
+import { HONEYPOT_FIELD } from "./honeypot";
+
+/** Har bir forma payload'iga qo'shiladigan yashirin bot-maydoni */
+type WithHoneypot = { [HONEYPOT_FIELD]?: string };
 
 async function post<T>(url: string, body: unknown): Promise<T> {
   const res = await fetch(url, {
@@ -13,7 +17,7 @@ async function post<T>(url: string, body: unknown): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export interface LeadPayload {
+export interface LeadPayload extends WithHoneypot {
   name: string;
   phone: string;
   note?: string;
@@ -28,7 +32,7 @@ export function useLeadMutation() {
   });
 }
 
-export interface ReviewPayload {
+export interface ReviewPayload extends WithHoneypot {
   name: string;
   phone?: string;
   rating: number;
@@ -42,7 +46,7 @@ export function useReviewMutation() {
   });
 }
 
-export interface OrderPayload {
+export interface OrderPayload extends WithHoneypot {
   name: string;
   phone: string;
   note?: string;

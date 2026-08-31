@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { ADMIN_COOKIE, adminToken } from "@/lib/admin-auth";
+import { ADMIN_COOKIE, verifyAdminToken } from "@/lib/admin-auth";
 import { deleteProduct, getProductById, updateProduct } from "@/lib/repo";
 
 async function guard() {
   const c = await cookies();
-  return c.get(ADMIN_COOKIE)?.value === adminToken();
+  return verifyAdminToken(c.get(ADMIN_COOKIE)?.value);
 }
 
 export async function GET(

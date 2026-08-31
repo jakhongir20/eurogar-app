@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useHoneypot } from "@/components/ui/honeypot";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import { Input, PhonePrefix } from "@/components/ui/field";
 import { useLeadMutation, type LeadPayload } from "@/lib/api";
 import { cn, formatPhone, isValidPhone, phoneDigits } from "@/lib/utils";
@@ -31,6 +33,7 @@ export function LeadForm({
   const [phone, setPhone] = useState("");
   const [errors, setErrors] = useState<{ name?: string; phone?: string }>({});
   const mutation = useLeadMutation();
+  const hp = useHoneypot();
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -45,6 +48,7 @@ export function LeadForm({
       phone: `+998${phoneDigits(phone)}`,
       source,
       meta,
+      [HONEYPOT_FIELD]: hp.value,
     });
   };
 
@@ -100,6 +104,7 @@ export function LeadForm({
         className,
       )}
     >
+      {hp.field}
       <Input
         tone={tone}
         placeholder={t("name")}

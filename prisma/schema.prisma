@@ -70,6 +70,17 @@ model Lead {
   @@index([status])
 }
 
+/// Formalarga spam himoyasi — IP + amal bo'yicha hisoblagich
+model RateLimit {
+  /// "<ip>:<action>", masalan "1.2.3.4:lead"
+  id       String   @id
+  count    Int      @default(0)
+  /// joriy oyna boshlangan vaqt
+  windowAt DateTime @default(now())
+
+  @@index([windowAt])
+}
+
 model Review {
   id        String   @id @default(cuid())
   name      String
