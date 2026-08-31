@@ -22,7 +22,7 @@ import {
   t as tr,
 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input, PhonePrefix, Select } from "@/components/ui/field";
+import { Input, PhoneInput, Select } from "@/components/ui/field";
 
 export function CalculatorView() {
   const locale = useLocale() as Locale;
@@ -377,23 +377,16 @@ export function CalculatorView() {
                     autoComplete="name"
                   />
 
-                  <div className="relative">
-                    <Input
-                      tone="dark"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      placeholder="90 123 45 67"
-                      className="pl-[4.4rem] font-medium tracking-wide"
-                      value={formatPhone(phone).replace("+998 ", "")}
-                      onChange={(e) => {
-                        setPhone(e.target.value);
-                        if (errors.phone)
-                          setErrors((s) => ({ ...s, phone: undefined }));
-                      }}
-                      error={errors.phone}
-                    />
-                    <PhonePrefix tone="dark" />
-                  </div>
+                  <PhoneInput
+                    tone="dark"
+                    value={formatPhone(phone).replace("+998 ", "")}
+                    onChange={(e) => {
+                      setPhone(e.target.value);
+                      if (errors.phone)
+                        setErrors((s) => ({ ...s, phone: undefined }));
+                    }}
+                    error={errors.phone}
+                  />
 
                   <Button
                     type="submit"

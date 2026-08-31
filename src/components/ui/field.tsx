@@ -79,7 +79,9 @@ const control = (tone: Tone, invalid?: boolean) =>
 
 /* ──────────────── Input ──────────────── */
 
-export interface InputProps extends ComponentPropsWithoutRef<"input"> {
+/* `prefix` — HTML'ning RDFa atributi, uni o'zimizniki bilan almashtiramiz */
+export interface InputProps
+  extends Omit<ComponentPropsWithoutRef<"input">, "prefix"> {
   label?: string;
   error?: string;
   hint?: string;
