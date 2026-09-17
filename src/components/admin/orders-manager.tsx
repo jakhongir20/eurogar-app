@@ -2,11 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Phone, ShoppingCart, Send, MessageSquare } from "lucide-react";
-import type { Order, OrderStatus } from "@/lib/types";
+import { useLocale, useTranslations } from "next-intl";
+import type { Locale, Order, OrderStatus } from "@/lib/types";
 import type { Lead } from "@/lib/store";
-import { cn, formatPrice, t } from "@/lib/utils";
+import { cn, formatPrice, t as tr } from "@/lib/utils";
 import { AdminShell } from "./shell";
-import { STATUS_LABEL, STATUS_ORDER, STATUS_STYLES } from "./order-status";
+import { STATUS_ORDER, STATUS_STYLES } from "./order-status";
 
 const dt = (iso: string) =>
   new Date(iso).toLocaleString("ru-RU", {
@@ -18,6 +19,11 @@ const dt = (iso: string) =>
   });
 
 export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("orders");
+  const tn = useTranslations("nav");
+  const ts = useTranslations("status");
+  const tsrc = useTranslations("leadSource");
   const qc = useQueryClient();
   const { data, isLoading } = useQuery<{ orders: Order[]; leads: Lead[] }>({
     queryKey: ["admin", "orders"],
@@ -40,7 +46,7 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
 
   if (isLoading) {
     return (
-      <AdminShell title={mode === "orders" ? "Buyurtmalar" : "Arizalar"}>
+      <AdminShell title={tn(mode)}>
         <div className="flex justify-center py-20">
           <Loader2 className="size-7 animate-spin text-muted" />
         </div>
@@ -51,11 +57,11 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
   /* ── arizalar ── */
   if (mode === "leads") {
     return (
-      <AdminShell title="Arizalar">
+      <AdminShell title={tn("leads")}>
         {leads.length === 0 ? (
           <Empty
             Icon={Send}
-            text="Hozircha ariza yo'q. Kalkulyator, aloqa formasi yoki bosh sahifadagi «qo'ng'iroq so'rovi» shu yerga tushadi."
+            text={t("noLeads")}
           />
         ) : (
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -78,7 +84,7 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
                     </a>
                   </div>
                   <span className="shrink-0 rounded-full bg-bone-200 px-2.5 py-1 text-[11px] font-bold text-muted">
-                    {l.source}
+                    {tsrc.has(l.source) ? tsrc(l.source) : l.source}
                   </span>
                 </div>
 
@@ -115,11 +121,11 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
 
   /* ── buyurtmalar ── */
   return (
-    <AdminShell title="Buyurtmalar">
+    <AdminShell title={tn("orders")}>
       {orders.length === 0 ? (
         <Empty
           Icon={ShoppingCart}
-          text="Hozircha buyurtma yo'q. Saytdan mahsulotni savatga qo'shib, test buyurtma bering — shu yerda paydo bo'ladi va Telegram botga ketadi."
+          text={t("noOrders")}
         />
       ) : (
         <div className="space-y-3">
@@ -136,7 +142,7 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
                   {dt(o.createdAt)}
                 </span>
                 <span className="ml-auto font-display text-[16px] font-extrabold text-graphite">
-                  {formatPrice(o.total, "uz")}
+                  {formatPrice(o.total, locale)}
                 </span>
               </div>
 
@@ -150,10 +156,10 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
                       >
                         <span className="text-graphite">
                           <span className="font-bold">{i.qty}×</span>{" "}
-                          {t(i.name, "uz")}
+                          {tr(i.name, locale)}
                         </span>
                         <span className="shrink-0 font-semibold text-muted tabular-nums">
-                          {formatPrice(i.price * i.qty, "uz")}
+                          {formatPrice(i.price * i.qty, locale)}
                         </span>
                       </li>
                     ))}
@@ -181,7 +187,7 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
 
                   <div>
                     <div className="mb-2 text-[11.5px] font-bold tracking-[0.1em] text-muted uppercase">
-                      Holati
+                      {t("status")}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {STATUS_ORDER.map((s) => (
@@ -195,7 +201,7 @@ export function OrdersManager({ mode }: { mode: "orders" | "leads" }) {
                               : "border border-bone-300 text-muted hover:text-graphite",
                           )}
                         >
-                          {STATUS_LABEL[s]}
+                          {ts(s)}
                         </button>
                       ))}
                     </div>

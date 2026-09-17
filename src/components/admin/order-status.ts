@@ -1,11 +1,6 @@
 import type { OrderStatus } from "@/lib/types";
 
-export const STATUS_LABEL: Record<OrderStatus, string> = {
-  new: "Yangi",
-  in_progress: "Jarayonda",
-  done: "Bajarildi",
-  canceled: "Bekor qilindi",
-};
+/* Yorliqlar — src/messages/admin/{uz,ru}.json → "status" */
 
 export const STATUS_STYLES: Record<OrderStatus, string> = {
   new: "bg-brand-400 text-ink-950",

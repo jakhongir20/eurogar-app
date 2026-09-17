@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Eye,
   EyeOff,
@@ -14,11 +15,10 @@ import {
   Search,
   Star,
   Trash2,
-  X,
 } from "lucide-react";
 import { categories } from "@/data/categories";
-import type { Product } from "@/lib/types";
-import { cn, formatPrice, t } from "@/lib/utils";
+import type { Locale, Product } from "@/lib/types";
+import { cn, formatPrice, t as tr } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input, Select, Textarea } from "@/components/ui/field";
 import { AdminShell } from "./shell";
@@ -40,6 +40,10 @@ const empty: Draft = {
 };
 
 export function ProductsManager() {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("products");
+  const tn = useTranslations("nav");
+  const tc = useTranslations("common");
   const qc = useQueryClient();
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<Draft | null>(null);
@@ -111,14 +115,14 @@ export function ProductsManager() {
 
   return (
     <AdminShell
-      title="Mahsulotlar"
+      title={tn("products")}
       action={
         <Button
           size="sm"
           onClick={() => setEditing({ ...empty })}
           icon={<Plus className="size-4" strokeWidth={2.8} />}
         >
-          Qo&apos;shish
+          {t("add")}
         </Button>
       }
     >
@@ -131,7 +135,7 @@ export function ProductsManager() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Mahsulot nomi yoki toifasi bo'yicha qidirish…"
+          placeholder={t("search")}
           className="h-13 w-full rounded-2xl border border-bone-300 bg-white pr-4 pl-11 text-[14.5px] text-graphite outline-none transition-all focus:border-brand-400 focus:shadow-[0_0_0_4px_rgba(41,171,226,.16)]"
         />
       </div>
@@ -144,12 +148,12 @@ export function ProductsManager() {
         <div className="overflow-hidden rounded-2xl border border-bone-300 bg-white">
           {/* sarlavha (desktop) */}
           <div className="hidden grid-cols-[auto_1fr_10rem_9rem_7rem_auto] items-center gap-4 border-b border-bone-300 bg-bone-100 px-4 py-3 text-[11.5px] font-bold tracking-[0.1em] text-muted uppercase lg:grid">
-            <span className="w-14">Rasm</span>
-            <span>Nomi</span>
-            <span>Toifa</span>
-            <span className="text-right">Narx</span>
-            <span className="text-right">Soni</span>
-            <span className="w-32 text-right">Amallar</span>
+            <span className="w-14">{t("colImage")}</span>
+            <span>{t("colName")}</span>
+            <span>{t("colCategory")}</span>
+            <span className="text-right">{t("colPrice")}</span>
+            <span className="text-right">{t("colStock")}</span>
+            <span className="w-32 text-right">{t("colActions")}</span>
           </div>
 
           <AnimatePresence initial={false}>
@@ -182,7 +186,7 @@ export function ProductsManager() {
                       />
                     )}
                     <span className="truncate text-[14px] font-bold text-graphite">
-                      {p.name.uz || "—"}
+                      {tr(p.name, locale) || "—"}
                     </span>
                   </div>
                   <div className="mt-0.5 truncate text-[12.5px] text-muted">
@@ -191,7 +195,7 @@ export function ProductsManager() {
                   {/* mobil ma'lumot */}
                   <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] lg:hidden">
                     <span className="font-extrabold text-graphite">
-                      {formatPrice(p.price, "uz")}
+                      {formatPrice(p.price, locale)}
                     </span>
                     <span
                       className={cn(
@@ -199,20 +203,20 @@ export function ProductsManager() {
                         p.stock > 0 ? "text-emerald-600" : "text-red-500",
                       )}
                     >
-                      {p.stock} dona
+                      {p.stock} {tr(p.unit, locale) || tc("pcs")}
                     </span>
                   </div>
                 </div>
 
                 <span className="hidden truncate text-[13px] text-muted lg:block">
-                  {t(
+                  {tr(
                     categories.find((c) => c.slug === p.categorySlug)?.name,
-                    "uz",
+                    locale,
                   )}
                 </span>
 
                 <span className="hidden text-right text-[13.5px] font-extrabold text-graphite lg:block">
-                  {formatPrice(p.price, "uz")}
+                  {formatPrice(p.price, locale)}
                 </span>
 
                 <span
@@ -226,7 +230,7 @@ export function ProductsManager() {
 
                 <div className="col-span-2 flex justify-end gap-1 lg:col-span-1 lg:w-32">
                   <IconBtn
-                    title={p.hidden ? "Ko'rsatish" : "Yashirish"}
+                    title={p.hidden ? t("show") : t("hide")}
                     onClick={() => patch.mutate({ id: p.id, hidden: !p.hidden })}
                     active={!p.hidden}
                   >
@@ -237,7 +241,7 @@ export function ProductsManager() {
                     )}
                   </IconBtn>
                   <IconBtn
-                    title="Tanlangan"
+                    title={t("featured")}
                     onClick={() =>
                       patch.mutate({ id: p.id, featured: !p.featured })
                     }
@@ -248,11 +252,11 @@ export function ProductsManager() {
                       strokeWidth={2.2}
                     />
                   </IconBtn>
-                  <IconBtn title="Tahrirlash" onClick={() => setEditing(p)}>
+                  <IconBtn title={t("edit")} onClick={() => setEditing(p)}>
                     <Pencil className="size-4" strokeWidth={2.2} />
                   </IconBtn>
                   <IconBtn
-                    title="O'chirish"
+                    title={tc("delete")}
                     danger
                     onClick={() => setConfirmId(p.id)}
                   >
@@ -265,7 +269,7 @@ export function ProductsManager() {
 
           {rows.length === 0 && (
             <p className="px-4 py-16 text-center text-[14px] text-muted">
-              Hech narsa topilmadi
+              {t("notFound")}
             </p>
           )}
         </div>
@@ -295,7 +299,7 @@ export function ProductsManager() {
             <button
               onClick={() => setConfirmId(null)}
               className="absolute inset-0 bg-ink-950/60 backdrop-blur-sm"
-              aria-label="close"
+              aria-label={tc("close")}
             />
             <motion.div
               initial={{ scale: 0.94, y: 18 }}
@@ -308,11 +312,10 @@ export function ProductsManager() {
                 <Trash2 className="size-6" strokeWidth={2.2} />
               </span>
               <h3 className="font-display mt-4 text-[17px] font-extrabold text-graphite">
-                Mahsulot o&apos;chirilsinmi?
+                {t("confirmTitle")}
               </h3>
               <p className="mt-2 text-[13.5px] leading-relaxed text-muted">
-                Bu amalni bekor qilib bo&apos;lmaydi. Vaqtincha olib qo&apos;yish
-                uchun &laquo;yashirish&raquo;dan foydalaning.
+                {t("confirmText")}
               </p>
               <div className="mt-6 flex gap-2">
                 <Button
@@ -320,7 +323,7 @@ export function ProductsManager() {
                   className="flex-1"
                   onClick={() => setConfirmId(null)}
                 >
-                  Bekor qilish
+                  {tc("cancel")}
                 </Button>
                 <Button
                   variant="dark"
@@ -328,7 +331,7 @@ export function ProductsManager() {
                   disabled={remove.isPending}
                   onClick={() => remove.mutate(confirmId)}
                 >
-                  O&apos;chirish
+                  {tc("delete")}
                 </Button>
               </div>
             </motion.div>
@@ -384,6 +387,9 @@ function ProductModal({
   onSave: (d: Draft) => void;
   saving: boolean;
 }) {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("products");
+  const tc = useTranslations("common");
   const [d, setD] = useState<Draft>(structuredClone(draft));
   const [uploading, setUploading] = useState(false);
   const [uploadNote, setUploadNote] = useState<string | null>(null);
@@ -400,11 +406,12 @@ function ProductModal({
     const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
     setUploading(false);
     if (!res.ok) {
-      setUploadNote("Rasmni yuklab bo'lmadi. Format yoki hajmni tekshiring.");
+      setUploadNote(t("uploadFailed"));
       return;
     }
-    const { url, warning } = await res.json();
-    if (warning) setUploadNote(warning);
+    const { url, sourceWidth, minWidth } = await res.json();
+    if (sourceWidth && minWidth)
+      setUploadNote(t("smallImage", { width: sourceWidth, min: minWidth }));
     set("images", [...(d.images ?? []), url]);
   };
 
@@ -413,42 +420,50 @@ function ProductModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto p-4 py-8"
+      className="fixed inset-0 z-[80] flex items-center justify-center p-3 md:p-6"
     >
       <button
         onClick={onClose}
         className="fixed inset-0 bg-ink-950/60 backdrop-blur-sm"
-        aria-label="close"
+        aria-label={tc("close")}
       />
 
+      {/* Overlay scroll bo'lmaydi: modal ekranga sig'adi, header qotib turadi,
+          faqat kontent scroll bo'ladi. Avval overlay scroll bo'lib, sticky
+          header/footer overlay'ga yopishardi — py-8 bo'shlig'idan kontent
+          header ustida va footer ostida ko'rinib qolardi. */}
       <motion.div
         initial={{ scale: 0.96, y: 22, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.96, y: 22, opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-3xl rounded-[1.75rem] bg-bone-100 shadow-[0_40px_100px_-30px_rgba(3,26,36,.6)]"
+        className="relative flex max-h-[calc(100dvh-1.5rem)] w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] bg-bone-100 shadow-[0_40px_100px_-30px_rgba(3,26,36,.6)] md:max-h-[calc(100dvh-3rem)]"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-[1.75rem] border-b border-bone-300 bg-bone-100/90 px-6 py-4 backdrop-blur-xl">
-          <h2 className="font-display text-[17px] font-extrabold text-graphite">
-            {d.id ? "Mahsulotni tahrirlash" : "Yangi mahsulot"}
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-bone-300 bg-bone-100 py-3.5 pr-3.5 pl-5 md:pl-6">
+          <h2 className="font-display min-w-0 truncate text-[17px] font-extrabold text-graphite">
+            {d.id ? t("editTitle") : t("newTitle")}
           </h2>
-          <button
-            onClick={onClose}
-            className="flex size-10 items-center justify-center rounded-full text-muted transition-colors hover:bg-bone-300 hover:text-graphite"
-          >
-            <X className="size-5" strokeWidth={2.3} />
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button variant="light" size="sm" onClick={onClose}>
+              {tc("cancel")}
+            </Button>
+            <Button
+              size="sm"
+              disabled={saving || !d.name?.uz?.trim()}
+              onClick={() => onSave(d)}
+              icon={saving ? <Loader2 className="size-4 animate-spin" /> : undefined}
+            >
+              {saving ? tc("saving") : tc("save")}
+            </Button>
+          </div>
         </div>
 
-        <div className="space-y-5 p-6">
+        <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain p-5 md:p-6">
           {/* rasmlar */}
           <div>
             <div className="mb-2 flex flex-wrap items-baseline gap-x-2 text-[13px] font-semibold text-muted">
-              Rasmlar
-              <span className="text-[12px] font-normal">
-                — istalgan o&apos;lchamda yuklang, 1600×1200 (4:3) WebP ga
-                avtomatik keltiriladi
-              </span>
+              {t("images")}
+              <span className="text-[12px] font-normal">{t("imagesHint")}</span>
             </div>
             <div className="flex flex-wrap gap-2.5">
               {(d.images ?? []).map((src, i) => (
@@ -469,8 +484,8 @@ function ProductModal({
                     <Trash2 className="size-5" strokeWidth={2.2} />
                   </button>
                   {i === 0 && (
-                    <span className="absolute bottom-1 left-1 rounded-full bg-brand-400 px-1.5 py-0.5 text-[9px] font-extrabold text-ink-950">
-                      ASOSIY
+                    <span className="absolute bottom-1 left-1 rounded-full bg-brand-400 px-1.5 py-0.5 text-[9px] font-extrabold text-ink-950 uppercase">
+                      {t("main")}
                     </span>
                   )}
                 </div>
@@ -486,7 +501,7 @@ function ProductModal({
                 ) : (
                   <>
                     <ImagePlus className="size-5" strokeWidth={2} />
-                    <span className="text-[11px] font-bold">Yuklash</span>
+                    <span className="text-[11px] font-bold">{t("upload")}</span>
                   </>
                 )}
               </button>
@@ -513,14 +528,14 @@ function ProductModal({
           {/* nomlar */}
           <div className="grid gap-4 md:grid-cols-2">
             <Input
-              label="Nomi (o'zbekcha)"
+              label={t("nameUz")}
               value={d.name?.uz ?? ""}
               onChange={(e) =>
                 set("name", { uz: e.target.value, ru: d.name?.ru ?? "" })
               }
             />
             <Input
-              label="Nomi (ruscha)"
+              label={t("nameRu")}
               value={d.name?.ru ?? ""}
               onChange={(e) =>
                 set("name", { uz: d.name?.uz ?? "", ru: e.target.value })
@@ -530,7 +545,7 @@ function ProductModal({
 
           <div className="grid gap-4 md:grid-cols-2">
             <Textarea
-              label="Tavsif (o'zbekcha)"
+              label={t("descUz")}
               rows={5}
               value={d.description?.uz ?? ""}
               onChange={(e) =>
@@ -541,7 +556,7 @@ function ProductModal({
               }
             />
             <Textarea
-              label="Tavsif (ruscha)"
+              label={t("descRu")}
               rows={5}
               value={d.description?.ru ?? ""}
               onChange={(e) =>
@@ -555,33 +570,33 @@ function ProductModal({
 
           <div className="grid gap-4 md:grid-cols-2">
             <Select
-              label="Toifa"
+              label={t("category")}
               value={d.categorySlug}
               onChange={(e) => set("categorySlug", e.target.value)}
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.slug}>
-                  {c.name.uz}
+                  {tr(c.name, locale)}
                 </option>
               ))}
             </Select>
             <Input
-              label="Slug (havola)"
+              label={t("slug")}
               value={d.slug ?? ""}
-              placeholder="avtomatik yaratiladi"
+              placeholder={t("slugPlaceholder")}
               onChange={(e) => set("slug", e.target.value)}
             />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <Input
-              label="Narxi (so'm)"
+              label={t("price")}
               type="number"
               value={d.price ?? 0}
               onChange={(e) => set("price", Number(e.target.value))}
             />
             <Input
-              label="Eski narx (ixtiyoriy)"
+              label={t("oldPrice")}
               type="number"
               value={d.oldPrice ?? ""}
               onChange={(e) =>
@@ -592,7 +607,7 @@ function ProductModal({
               }
             />
             <Input
-              label="Mavjud soni"
+              label={t("stock")}
               type="number"
               value={d.stock ?? 0}
               onChange={(e) => set("stock", Number(e.target.value))}
@@ -601,14 +616,14 @@ function ProductModal({
 
           <div className="grid gap-4 md:grid-cols-2">
             <Input
-              label="O'lchov birligi (uz)"
+              label={t("unitUz")}
               value={d.unit?.uz ?? ""}
               onChange={(e) =>
                 set("unit", { uz: e.target.value, ru: d.unit?.ru ?? "" })
               }
             />
             <Input
-              label="O'lchov birligi (ru)"
+              label={t("unitRu")}
               value={d.unit?.ru ?? ""}
               onChange={(e) =>
                 set("unit", { uz: d.unit?.uz ?? "", ru: e.target.value })
@@ -619,30 +634,16 @@ function ProductModal({
           {/* bayroqlar */}
           <div className="flex flex-wrap gap-3">
             <Toggle
-              label="Saytda ko'rinsin"
+              label={t("visible")}
               checked={!d.hidden}
               onChange={(v) => set("hidden", !v)}
             />
             <Toggle
-              label="Tanlangan (bosh sahifada)"
+              label={t("featuredToggle")}
               checked={!!d.featured}
               onChange={(v) => set("featured", v)}
             />
           </div>
-        </div>
-
-        <div className="sticky bottom-0 flex gap-2 rounded-b-[1.75rem] border-t border-bone-300 bg-bone-100/90 px-6 py-4 backdrop-blur-xl">
-          <Button variant="light" className="flex-1" onClick={onClose}>
-            Bekor qilish
-          </Button>
-          <Button
-            className="flex-1"
-            disabled={saving || !d.name?.uz?.trim()}
-            onClick={() => onSave(d)}
-            icon={saving ? <Loader2 className="size-4 animate-spin" /> : undefined}
-          >
-            {saving ? "Saqlanmoqda…" : "Saqlash"}
-          </Button>
         </div>
       </motion.div>
     </motion.div>

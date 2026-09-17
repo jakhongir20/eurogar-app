@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ExternalLink,
   LayoutDashboard,
@@ -17,13 +18,14 @@ import {
 import { cn } from "@/lib/utils";
 import { ADMIN_BASE, ADMIN_LOGIN } from "@/lib/admin-auth";
 import { Logo } from "@/components/layout/logo";
+import { AdminLangSwitch } from "./lang-switch";
 
 const NAV = [
-  { href: ADMIN_BASE, label: "Boshqaruv paneli", Icon: LayoutDashboard, exact: true },
-  { href: `${ADMIN_BASE}/products`, label: "Mahsulotlar", Icon: Package },
-  { href: `${ADMIN_BASE}/orders`, label: "Buyurtmalar", Icon: ShoppingCart },
-  { href: `${ADMIN_BASE}/leads`, label: "Arizalar", Icon: Send },
-  { href: `${ADMIN_BASE}/reviews`, label: "Sharhlar", Icon: Star },
+  { href: ADMIN_BASE, key: "dashboard", Icon: LayoutDashboard, exact: true },
+  { href: `${ADMIN_BASE}/products`, key: "products", Icon: Package, exact: false },
+  { href: `${ADMIN_BASE}/orders`, key: "orders", Icon: ShoppingCart, exact: false },
+  { href: `${ADMIN_BASE}/leads`, key: "leads", Icon: Send, exact: false },
+  { href: `${ADMIN_BASE}/reviews`, key: "reviews", Icon: Star, exact: false },
 ];
 
 export function AdminShell({
@@ -37,6 +39,9 @@ export function AdminShell({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const locale = useLocale();
+  const tn = useTranslations("nav");
+  const tc = useTranslations("common");
   const [open, setOpen] = useState(false);
 
   const logout = async () => {
@@ -47,7 +52,7 @@ export function AdminShell({
 
   const links = (
     <nav className="space-y-1">
-      {NAV.map(({ href, label, Icon, exact }) => {
+      {NAV.map(({ href, key, Icon, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href);
         return (
           <Link
@@ -62,7 +67,7 @@ export function AdminShell({
             )}
           >
             <Icon className="size-[18px] shrink-0" strokeWidth={2.2} />
-            {label}
+            {tn(key)}
           </Link>
         );
       })}
@@ -76,7 +81,7 @@ export function AdminShell({
         <Link href={ADMIN_BASE} className="px-2 py-3">
           <Logo tone="dark" />
           <div className="mt-1 text-[10.5px] font-bold tracking-[0.22em] text-brand-400 uppercase">
-            Admin panel
+            {tc("adminPanel")}
           </div>
         </Link>
 
@@ -84,20 +89,20 @@ export function AdminShell({
 
         <div className="space-y-1 border-t border-white/8 pt-3">
           <a
-            href="/uz"
+            href={`/${locale}`}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-[14px] font-semibold text-white/60 transition-colors hover:bg-white/8 hover:text-white"
           >
             <ExternalLink className="size-[18px]" strokeWidth={2.2} />
-            Saytni ochish
+            {tn("openSite")}
           </a>
           <button
             onClick={logout}
             className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-[14px] font-semibold text-white/60 transition-colors hover:bg-red-500/15 hover:text-red-400"
           >
             <LogOut className="size-[18px]" strokeWidth={2.2} />
-            Chiqish
+            {tn("logout")}
           </button>
         </div>
       </aside>
@@ -108,13 +113,14 @@ export function AdminShell({
           <button
             onClick={() => setOpen(false)}
             className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm"
-            aria-label="close"
+            aria-label={tc("close")}
           />
           <aside className="dark-section absolute top-0 left-0 flex h-full w-72 flex-col bg-ink-950 p-4">
             <div className="flex items-center justify-between px-2 py-3">
               <Logo tone="dark" />
               <button
                 onClick={() => setOpen(false)}
+                aria-label={tc("close")}
                 className="flex size-10 items-center justify-center rounded-full text-white hover:bg-white/10"
               >
                 <X className="size-5" strokeWidth={2.3} />
@@ -126,7 +132,7 @@ export function AdminShell({
               className="flex items-center gap-3 rounded-xl px-3.5 py-3 text-[14px] font-semibold text-white/60 hover:text-red-400"
             >
               <LogOut className="size-[18px]" strokeWidth={2.2} />
-              Chiqish
+              {tn("logout")}
             </button>
           </aside>
         </div>
@@ -139,14 +145,17 @@ export function AdminShell({
             <button
               onClick={() => setOpen(true)}
               className="flex size-10 items-center justify-center rounded-full text-graphite hover:bg-bone-300 lg:hidden"
-              aria-label="menu"
+              aria-label={tc("menu")}
             >
               <Menu className="size-5" strokeWidth={2.3} />
             </button>
-            <h1 className="font-display truncate text-[17px] font-extrabold text-graphite md:text-[19px]">
+            <h1 className="font-display min-w-0 truncate text-[17px] font-extrabold text-graphite md:text-[19px]">
               {title}
             </h1>
-            <div className="ml-auto flex items-center gap-2">{action}</div>
+            <div className="ml-auto flex shrink-0 items-center gap-2">
+              <AdminLangSwitch />
+              {action}
+            </div>
           </div>
         </header>
 

@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowUpRight,
   Box,
@@ -12,12 +13,12 @@ import {
   ShoppingCart,
   Wallet,
 } from "lucide-react";
-import type { Order } from "@/lib/types";
+import type { Locale, Order } from "@/lib/types";
 import type { Lead } from "@/lib/store";
 import { cn, formatCompact, formatPrice } from "@/lib/utils";
 import { ADMIN_BASE } from "@/lib/admin-auth";
 import { AdminShell } from "./shell";
-import { STATUS_STYLES, STATUS_LABEL } from "./order-status";
+import { STATUS_STYLES } from "./order-status";
 
 interface ProductsRes {
   stats: {
@@ -30,6 +31,13 @@ interface ProductsRes {
 }
 
 export function AdminDashboard() {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("dashboard");
+  const tn = useTranslations("nav");
+  const ts = useTranslations("status");
+  const tsrc = useTranslations("leadSource");
+  const tc = useTranslations("common");
+
   const productsQ = useQuery<ProductsRes>({
     queryKey: ["admin", "products"],
     queryFn: () => fetch("/api/admin/products").then((r) => r.json()),
@@ -49,16 +57,16 @@ export function AdminDashboard() {
     .reduce((a, o) => a + o.total, 0);
 
   const cards = [
-    { label: "Mahsulotlar", value: s?.total ?? "—", Icon: Package, tone: "ink" },
-    { label: "Saytda ko'rinadi", value: s?.visible ?? "—", Icon: Box, tone: "emerald" },
-    { label: "Yashirilgan", value: s?.hidden ?? "—", Icon: EyeOff, tone: "muted" },
-    { label: "Tugagan", value: s?.outOfStock ?? "—", Icon: PackageX, tone: "amber" },
-    { label: "Buyurtmalar", value: orders.length, Icon: ShoppingCart, tone: "ink" },
-    { label: "Arizalar", value: leads.length, Icon: Send, tone: "ink" },
+    { label: t("products"), value: s?.total ?? "—", Icon: Package, tone: "ink" },
+    { label: t("visible"), value: s?.visible ?? "—", Icon: Box, tone: "emerald" },
+    { label: t("hidden"), value: s?.hidden ?? "—", Icon: EyeOff, tone: "muted" },
+    { label: t("outOfStock"), value: s?.outOfStock ?? "—", Icon: PackageX, tone: "amber" },
+    { label: t("orders"), value: orders.length, Icon: ShoppingCart, tone: "ink" },
+    { label: t("leads"), value: leads.length, Icon: Send, tone: "ink" },
   ] as const;
 
   return (
-    <AdminShell title="Boshqaruv paneli">
+    <AdminShell title={tn("dashboard")}>
       {/* ── asosiy raqamlar ── */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {cards.map((c) => (
@@ -94,13 +102,13 @@ export function AdminDashboard() {
           <div className="relative flex items-start justify-between">
             <div>
               <div className="text-[12px] font-bold tracking-[0.16em] text-white/60 uppercase">
-                Buyurtmalar summasi
+                {t("revenue")}
               </div>
               <div className="font-display mt-2 text-[clamp(1.6rem,4vw,2.2rem)] leading-none font-black text-brand-400">
-                {formatPrice(revenue, "uz")}
+                {formatPrice(revenue, locale)}
               </div>
               <div className="mt-2 text-[12.5px] text-white/60">
-                Bekor qilinganlardan tashqari
+                {t("revenueNote")}
               </div>
             </div>
             <Wallet className="size-6 text-brand-400" strokeWidth={2} />
@@ -109,13 +117,13 @@ export function AdminDashboard() {
 
         <div className="rounded-2xl border border-bone-300 bg-white p-5">
           <div className="text-[12px] font-bold tracking-[0.16em] text-muted uppercase">
-            Ombordagi tovar qiymati
+            {t("stockValue")}
           </div>
           <div className="font-display mt-2 text-[clamp(1.6rem,4vw,2.2rem)] leading-none font-black text-graphite">
-            {s ? formatCompact(s.stockValue, "uz") + " so'm" : "—"}
+            {s ? `${formatCompact(s.stockValue, locale)} ${tc("currency")}` : "—"}
           </div>
           <div className="mt-2 text-[12.5px] text-muted">
-            Narx × mavjud soni bo&apos;yicha
+            {t("stockValueNote")}
           </div>
         </div>
       </div>
@@ -123,10 +131,10 @@ export function AdminDashboard() {
       {/* ── oxirgi buyurtmalar ── */}
       <div className="mt-3 grid gap-3 lg:grid-cols-2">
         <Panel
-          title="Oxirgi buyurtmalar"
+          title={t("latestOrders")}
           href={`${ADMIN_BASE}/orders`}
           empty={orders.length === 0}
-          emptyText="Hozircha buyurtma yo'q. Saytdan test buyurtma bering — shu yerda paydo bo'ladi."
+          emptyText={t("noOrders")}
         >
           {orders.slice(0, 5).map((o) => (
             <div
@@ -144,7 +152,7 @@ export function AdminDashboard() {
                       STATUS_STYLES[o.status],
                     )}
                   >
-                    {STATUS_LABEL[o.status]}
+                    {ts(o.status)}
                   </span>
                 </div>
                 <div className="mt-0.5 truncate text-[13px] text-muted">
@@ -152,17 +160,17 @@ export function AdminDashboard() {
                 </div>
               </div>
               <span className="shrink-0 text-[13.5px] font-extrabold text-graphite">
-                {formatPrice(o.total, "uz")}
+                {formatPrice(o.total, locale)}
               </span>
             </div>
           ))}
         </Panel>
 
         <Panel
-          title="Oxirgi arizalar"
+          title={t("latestLeads")}
           href={`${ADMIN_BASE}/leads`}
           empty={leads.length === 0}
-          emptyText="Hozircha ariza yo'q. Kalkulyator yoki aloqa formasidan test yuboring."
+          emptyText={t("noLeads")}
         >
           {leads.slice(0, 5).map((l) => (
             <div
@@ -178,7 +186,7 @@ export function AdminDashboard() {
                 </div>
               </div>
               <span className="shrink-0 rounded-full bg-bone-200 px-2.5 py-1 text-[11px] font-bold text-muted">
-                {l.source}
+                {tsrc.has(l.source) ? tsrc(l.source) : l.source}
               </span>
             </div>
           ))}
@@ -201,6 +209,7 @@ function Panel({
   empty: boolean;
   emptyText: string;
 }) {
+  const tc = useTranslations("common");
   return (
     <div className="overflow-hidden rounded-2xl border border-bone-300 bg-white">
       <div className="flex items-center justify-between px-4 py-3.5">
@@ -211,7 +220,7 @@ function Panel({
           href={href}
           className="flex items-center gap-1 text-[12.5px] font-bold text-brand-600 transition-colors hover:text-brand-700"
         >
-          Barchasi
+          {tc("all")}
           <ArrowUpRight className="size-3.5" strokeWidth={2.5} />
         </Link>
       </div>

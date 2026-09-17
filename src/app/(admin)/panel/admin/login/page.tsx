@@ -3,13 +3,17 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { LogIn } from "lucide-react";
 import { ADMIN_BASE } from "@/lib/admin-auth";
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/field";
+import { AdminLangSwitch } from "@/components/admin/lang-switch";
 
 export default function AdminLoginPage() {
+  const t = useTranslations("login");
+  const tc = useTranslations("common");
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,15 +32,11 @@ export default function AdminLoginPage() {
     if (!res.ok) {
       const data = await res.json().catch(() => null);
       if (res.status === 429) {
-        setError("Juda ko'p urinish. 15 daqiqadan keyin qayta urinib ko'ring.");
+        setError(t("tooMany"));
       } else if (data?.error === "not_configured") {
-        setError(
-          data.reason === "leaked"
-            ? "ADMIN_PASSWORD standart (ochiq) parolga qo'yilgan. Uni Vercel'da boshqa parolga almashtiring."
-            : "ADMIN_PASSWORD sozlanmagan. Vercel → Environment Variables'da kamida 8 belgili parol qo'ying va redeploy qiling.",
-        );
+        setError(data.reason === "leaked" ? t("leaked") : t("notConfigured"));
       } else {
-        setError("Parol noto'g'ri");
+        setError(t("wrong"));
       }
       return;
     }
@@ -47,6 +47,7 @@ export default function AdminLoginPage() {
   return (
     <div className="dark-section relative flex min-h-dvh items-center justify-center overflow-hidden bg-ink-950 p-5 text-white">
       <div className="grid-texture pointer-events-none absolute inset-0 opacity-70" />
+      <AdminLangSwitch tone="dark" className="absolute top-5 right-5" />
       <div
         className="pointer-events-none absolute top-1/4 left-1/2 size-[34rem] -translate-x-1/2 rounded-full opacity-[0.15] blur-[110px]"
         style={{
@@ -65,14 +66,14 @@ export default function AdminLoginPage() {
         <div className="flex flex-col items-center text-center">
           <Logo tone="dark" className="text-[24px]" />
           <div className="mt-1.5 text-[10.5px] font-bold tracking-[0.22em] text-brand-400 uppercase">
-            Admin panel
+            {tc("adminPanel")}
           </div>
         </div>
 
         <div className="mt-8">
           <PasswordInput
             tone="dark"
-            label="Parol"
+            label={t("password")}
             autoFocus
             autoComplete="current-password"
             placeholder="••••••••"
@@ -102,7 +103,7 @@ export default function AdminLoginPage() {
           }
           className="mt-5 w-full"
         >
-          {loading ? "Tekshirilmoqda…" : "Kirish"}
+          {loading ? t("checking") : t("submit")}
         </Button>
       </motion.form>
     </div>

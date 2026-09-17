@@ -94,10 +94,11 @@ export async function POST(req: Request) {
       width: TARGET_W,
       height: TARGET_H,
       bytes: output.length,
-      warning:
-        srcW && srcW < MIN_SOURCE_W
-          ? `Asl rasm kichik (${srcW}px). Sifat uchun kamida ${MIN_SOURCE_W}px kenglik tavsiya etiladi.`
-          : undefined,
+      /* Asl rasm kichik bo'lsa — ogohlantirish matnini admin o'z tilida
+         yasaydi (products.smallImage), shuning uchun faqat raqamlar */
+      ...(srcW && srcW < MIN_SOURCE_W
+        ? { sourceWidth: srcW, minWidth: MIN_SOURCE_W }
+        : {}),
     });
   } catch {
     return NextResponse.json({ error: "bad_image" }, { status: 422 });

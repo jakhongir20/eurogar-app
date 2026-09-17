@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { Check, Loader2, Phone, Star, Trash2, X } from "lucide-react";
 import type { Review, ReviewStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -16,21 +17,20 @@ const dt = (iso: string) =>
     minute: "2-digit",
   });
 
-const STATUS: Record<ReviewStatus, { label: string; cls: string }> = {
-  pending: { label: "Kutilmoqda", cls: "bg-amber-100 text-amber-700" },
-  approved: { label: "Saytda", cls: "bg-emerald-100 text-emerald-700" },
-  rejected: { label: "Rad etilgan", cls: "bg-red-100 text-red-600" },
+/* Yorliqlar — src/messages/admin/{uz,ru}.json → "reviews" (kalit = holat nomi) */
+const STATUS_CLS: Record<ReviewStatus, string> = {
+  pending: "bg-amber-100 text-amber-700",
+  approved: "bg-emerald-100 text-emerald-700",
+  rejected: "bg-red-100 text-red-600",
 };
 
-const FILTERS: { key: ReviewStatus | "all"; label: string }[] = [
-  { key: "pending", label: "Kutilmoqda" },
-  { key: "approved", label: "Saytda" },
-  { key: "rejected", label: "Rad etilgan" },
-  { key: "all", label: "Hammasi" },
-];
+const FILTERS: (ReviewStatus | "all")[] = ["pending", "approved", "rejected", "all"];
 
 /** TZ 2.10: sharhlar moderatsiyasi — tasdiqlangani bosh sahifada chiqadi */
 export function ReviewsManager() {
+  const t = useTranslations("reviews");
+  const tn = useTranslations("nav");
+  const tc = useTranslations("common");
   const qc = useQueryClient();
   const [filter, setFilter] = useState<ReviewStatus | "all">("pending");
 
@@ -67,7 +67,7 @@ export function ReviewsManager() {
   const pendingCount = all.filter((r) => r.status === "pending").length;
 
   return (
-    <AdminShell title="Sharhlar">
+    <AdminShell title={tn("reviews")}>
       {isLoading ? (
         <div className="flex justify-center py-20">
           <Loader2 className="size-7 animate-spin text-muted" />
@@ -77,17 +77,17 @@ export function ReviewsManager() {
           <div className="mb-5 flex flex-wrap gap-1.5">
             {FILTERS.map((f) => (
               <button
-                key={f.key}
-                onClick={() => setFilter(f.key)}
+                key={f}
+                onClick={() => setFilter(f)}
                 className={cn(
                   "rounded-full px-3.5 py-2 text-[12.5px] font-bold transition-all active:scale-95",
-                  filter === f.key
+                  filter === f
                     ? "bg-navy-900 text-white"
                     : "border border-bone-300 bg-white text-muted hover:text-graphite",
                 )}
               >
-                {f.label}
-                {f.key === "pending" && pendingCount > 0 && (
+                {t(f)}
+                {f === "pending" && pendingCount > 0 && (
                   <span className="ml-1.5 rounded-full bg-amber-400 px-1.5 py-0.5 text-[10.5px] text-navy-950">
                     {pendingCount}
                   </span>
@@ -100,9 +100,7 @@ export function ReviewsManager() {
             <div className="flex flex-col items-center rounded-2xl border border-dashed border-bone-400 bg-white/60 px-6 py-20 text-center">
               <Star className="size-10 text-bone-500" strokeWidth={1.6} />
               <p className="mt-4 max-w-md text-[14px] leading-relaxed text-muted">
-                {filter === "pending"
-                  ? "Moderatsiya kutayotgan sharh yo'q. Saytdagi «Fikr qoldirish» formasi orqali kelganlar shu yerga tushadi."
-                  : "Bu bo'limda sharh yo'q."}
+                {filter === "pending" ? t("emptyPending") : t("empty")}
               </p>
             </div>
           ) : (
@@ -135,10 +133,10 @@ export function ReviewsManager() {
                     <span
                       className={cn(
                         "shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold",
-                        STATUS[r.status].cls,
+                        STATUS_CLS[r.status],
                       )}
                     >
-                      {STATUS[r.status].label}
+                      {t(r.status)}
                     </span>
                   </div>
 
@@ -166,7 +164,7 @@ export function ReviewsManager() {
                         className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-emerald-500 px-3 py-2 text-[12.5px] font-bold text-white transition-all hover:bg-emerald-600 active:scale-95"
                       >
                         <Check className="size-3.5" strokeWidth={2.6} />
-                        Tasdiqlash
+                        {t("approve")}
                       </button>
                     )}
                     {r.status !== "rejected" && (
@@ -175,14 +173,14 @@ export function ReviewsManager() {
                         className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-bone-300 px-3 py-2 text-[12.5px] font-bold text-muted transition-all hover:border-red-300 hover:text-red-500 active:scale-95"
                       >
                         <X className="size-3.5" strokeWidth={2.6} />
-                        Rad etish
+                        {t("reject")}
                       </button>
                     )}
                     <button
                       onClick={() => {
-                        if (confirm("Sharh butunlay o'chirilsinmi?")) remove.mutate(r.id);
+                        if (confirm(t("confirmDelete"))) remove.mutate(r.id);
                       }}
-                      aria-label="O'chirish"
+                      aria-label={tc("delete")}
                       className="flex size-9 shrink-0 items-center justify-center rounded-full border border-bone-300 text-muted transition-all hover:border-red-300 hover:text-red-500 active:scale-95"
                     >
                       <Trash2 className="size-3.5" strokeWidth={2.2} />
