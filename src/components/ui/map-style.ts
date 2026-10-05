@@ -2,14 +2,46 @@
  * Xarita uchun umumiy uslub — `BranchMap` (aloqa sahifasi, bitta nuqta) va
  * `ShowroomsMap` (bosh sahifa, barcha shou-rumlar) shu yerdan oladi.
  *
- * CARTO Positron plitkalari: ochiq kulrang, API kalit talab qilmaydi.
+ * Fon — OpenFreeMap Positron: ochiq kulrang vektor xarita. API kalit,
+ * ro'yxatdan o'tish va so'rov limiti yo'q, tijoriy foydalanish ruxsat etilgan.
+ * Leaflet'ga @maplibre/maplibre-gl-leaflet orqali ulanadi (OpenFreeMap'ning
+ * Leaflet uchun tavsiya qilgan usuli).
+ *
+ * Avval CARTO Positron raster plitkalari edi, lekin 2026-yil sentabrdan CARTO
+ * kalitsiz so'rovlarga "API KEY REQUIRED" suv belgisini qo'ya boshladi.
  */
 
-export const MAP_TILES =
-  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+export const MAP_STYLE = "https://tiles.openfreemap.org/styles/positron";
 
+/**
+ * `el` ekranga yaqinlashganda `init` ni bir marta chaqiradi.
+ * MapLibre ~270 KB (gzip) — u sahifa ochilganda emas, xarita ko'rinishiga
+ * yaqin qolganda yuklanadi; bosh sahifa tezligiga ta'sir qilmaydi.
+ * Qaytgan funksiya kuzatuvni to'xtatadi (effekt tozalanishi uchun).
+ */
+export function whenNearViewport(el: Element, init: () => void, margin = "400px") {
+  if (typeof IntersectionObserver === "undefined") {
+    init();
+    return () => {};
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        io.disconnect();
+        init();
+      }
+    },
+    { rootMargin: `${margin} 0px` },
+  );
+  io.observe(el);
+  return () => io.disconnect();
+}
+
+/** OpenFreeMap talab qiladigan atributsiya */
 export const MAP_ATTRIBUTION =
-  '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap</a> © CARTO';
+  '<a href="https://openfreemap.org" target="_blank" rel="noreferrer">OpenFreeMap</a> ' +
+  '<a href="https://www.openmaptiles.org/" target="_blank" rel="noreferrer">© OpenMapTiles</a> ' +
+  '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap</a>';
 
 /** Tomchi shaklidagi pin. Rang berilmasa — brend siyani. */
 export function pinSvg(fill = "#29ABE2", stroke = "#08303F") {

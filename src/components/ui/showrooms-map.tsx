@@ -2,12 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
+import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as LeafletMap, Marker } from "leaflet";
 import {
   MAP_ATTRIBUTION,
-  MAP_TILES,
+  MAP_STYLE,
   activePinHtml,
   idlePinHtml,
+  whenNearViewport,
 } from "./map-style";
 
 export interface MapPoint {
@@ -49,32 +51,43 @@ export function ShowroomsMap({
     selectRef.current = onSelect;
   }, [onSelect]);
 
+  /* Xarita kechikib quriladi (ekranga yaqinlashganda) — o'sha paytda
+     qaysi shahar tanlanganini bilish uchun */
+  const activeRef = useRef(activeId);
+  useEffect(() => {
+    activeRef.current = activeId;
+  }, [activeId]);
+
   /* ── 1. Xaritani bir marta qurish ── */
   useEffect(() => {
     let cancelled = false;
+    const el = ref.current;
+    if (!el) return;
 
-    (async () => {
-      const L = (await import("leaflet")).default;
+    const init = async () => {
+      /* Leaflet va MapLibre ko'prigi parallel yuklanadi */
+      const [{ default: L }, { maplibreGL }] = await Promise.all([
+        import("leaflet"),
+        import("@maplibre/maplibre-gl-leaflet"),
+      ]);
       if (cancelled || !ref.current || mapRef.current) return;
 
-      const start = points.find((p) => p.id === activeId) ?? points[0];
+      const start = points.find((p) => p.id === activeRef.current) ?? points[0];
       if (!start) return;
 
       const map = L.map(ref.current, {
         center: [start.lat, start.lng],
         zoom,
         zoomControl: false,
+        maxZoom: 19,
         scrollWheelZoom: false, // sahifa skrollini "tutib qolmasin"
         dragging: !L.Browser.mobile, // mobil'da sahifa skrolli ustuvor
         attributionControl: false,
       });
       mapRef.current = map;
 
-      L.tileLayer(MAP_TILES, {
-        subdomains: "abcd",
-        maxZoom: 19,
-        detectRetina: false,
-      }).addTo(map);
+      /* Vektor fon: har qanday zoom va Retina ekranda tiniq */
+      maplibreGL({ style: MAP_STYLE }).addTo(map);
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
       L.control
@@ -111,10 +124,12 @@ export function ShowroomsMap({
       roRef.current = ro;
 
       setTimeout(() => map.invalidateSize({ pan: false }), 350);
-    })();
+    };
+    const stop = whenNearViewport(el, () => void init());
 
     return () => {
       cancelled = true;
+      stop();
       roRef.current?.disconnect();
       roRef.current = null;
       mapRef.current?.remove();

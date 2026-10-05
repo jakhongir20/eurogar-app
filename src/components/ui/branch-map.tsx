@@ -2,11 +2,17 @@
 
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
+import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as LeafletMap } from "leaflet";
-import { MAP_ATTRIBUTION, MAP_TILES, activePinHtml } from "./map-style";
+import {
+  MAP_ATTRIBUTION,
+  MAP_STYLE,
+  activePinHtml,
+  whenNearViewport,
+} from "./map-style";
 
 /**
- * Zamonaviy interaktiv xarita — Leaflet + CARTO Positron (ochiq kulrang) plitkalar.
+ * Zamonaviy interaktiv xarita — Leaflet + OpenFreeMap Positron (ochiq kulrang, vektor).
  * Google iframe o'rniga: brend rangidagi pulsli pin, dizaynga mos minimal ko'rinish.
  * API kalit talab qilmaydi; «Xaritada ochish» havolasi Google Maps'ga olib boraveradi.
  *
@@ -32,26 +38,30 @@ export function BranchMap({
 
   useEffect(() => {
     let cancelled = false;
+    const el = ref.current;
+    if (!el) return;
 
-    (async () => {
-      const L = (await import("leaflet")).default;
+    const init = async () => {
+      /* Leaflet va MapLibre ko'prigi parallel yuklanadi */
+      const [{ default: L }, { maplibreGL }] = await Promise.all([
+        import("leaflet"),
+        import("@maplibre/maplibre-gl-leaflet"),
+      ]);
       if (cancelled || !ref.current || mapRef.current) return;
 
       const map = L.map(ref.current, {
         center: [lat, lng],
         zoom,
         zoomControl: false,
+        maxZoom: 19,
         scrollWheelZoom: false, // sahifa skrollini "tutib qolmasin"
         dragging: !L.Browser.mobile, // mobil'da sahifa skrolli ustuvor
         attributionControl: false,
       });
       mapRef.current = map;
 
-      L.tileLayer(MAP_TILES, {
-        subdomains: "abcd",
-        maxZoom: 19,
-        detectRetina: false,
-      }).addTo(map);
+      /* Vektor fon: har qanday zoom va Retina ekranda tiniq */
+      maplibreGL({ style: MAP_STYLE }).addTo(map);
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
       L.control
@@ -70,10 +80,12 @@ export function BranchMap({
 
       // Reveal-animatsiyadan keyin o'lchamni qayta hisoblash
       setTimeout(() => map.invalidateSize(), 350);
-    })();
+    };
+    const stop = whenNearViewport(el, () => void init());
 
     return () => {
       cancelled = true;
+      stop();
       mapRef.current?.remove();
       mapRef.current = null;
     };
