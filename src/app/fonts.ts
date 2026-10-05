@@ -14,6 +14,13 @@ import localFont from "next/font/local";
    ------------------------------------------------------------ */
 
 
+/* Metrikasi moslangan Arial zaxirasi ("... Fallback") FAQAT latin subset'da.
+   next/font uni oilaga unicode-range'siz qo'shadi; agar kirill/latin-ext ham
+   o'z zaxirasini olsa yoki latin'niki stekda kirilldan oldin tursa, Arial
+   kirill harflarini "egallab oladi" va rus sahifasi Unbounded/Manrope o'rniga
+   Arial bilan chiziladi. Shuning uchun: cyr/ext — zaxirasiz, latin esa
+   globals.css'dagi stekda OXIRIDA (shrift yuklanguncha zaxira hamma uchun). */
+
 /* next/font talabi: har bir loader modul darajasida, to'g'ridan-to'g'ri
    va literal argumentlar bilan chaqirilishi shart — yordamchi funksiya
    ichida chaqirib bo'lmaydi. Shuning uchun oltita alohida e'lon. */
@@ -29,6 +36,7 @@ const manropeCyr = localFont({
   display: "swap",
   /* preload YO'Q: bu subset faqat matnda mos belgi bo'lsa yuklanadi */
   preload: false,
+  adjustFontFallback: false,
   src: [{ path: "../fonts/manrope-cyrillic-wght-normal.woff2", weight: "200 800", style: "normal" }],
   declarations: [{ prop: "unicode-range", value: "U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116" }],
 });
@@ -37,6 +45,7 @@ const manropeExt = localFont({
   display: "swap",
   /* preload YO'Q: bu subset faqat matnda mos belgi bo'lsa yuklanadi */
   preload: false,
+  adjustFontFallback: false,
   src: [{ path: "../fonts/manrope-latin-ext-wght-normal.woff2", weight: "200 800", style: "normal" }],
   declarations: [{ prop: "unicode-range", value: "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF" }],
 });
@@ -52,6 +61,7 @@ const unboundedCyr = localFont({
   display: "swap",
   /* preload YO'Q: bu subset faqat matnda mos belgi bo'lsa yuklanadi */
   preload: false,
+  adjustFontFallback: false,
   src: [{ path: "../fonts/unbounded-cyrillic-wght-normal.woff2", weight: "200 900", style: "normal" }],
   declarations: [{ prop: "unicode-range", value: "U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116" }],
 });
@@ -60,6 +70,7 @@ const unboundedExt = localFont({
   display: "swap",
   /* preload YO'Q: bu subset faqat matnda mos belgi bo'lsa yuklanadi */
   preload: false,
+  adjustFontFallback: false,
   src: [{ path: "../fonts/unbounded-latin-ext-wght-normal.woff2", weight: "200 900", style: "normal" }],
   declarations: [{ prop: "unicode-range", value: "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF" }],
 });

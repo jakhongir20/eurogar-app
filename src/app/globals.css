@@ -69,10 +69,12 @@
 
   /* ---- Fonts ---- */
   /* Har bir subset alohida @font-face — brauzer unicode-range bo'yicha
-     faqat kerakligini yuklaydi (layout.tsx dagi izohga qarang) */
-  --font-display: var(--f-display-latin), var(--f-display-cyr),
-    var(--f-display-ext), system-ui, sans-serif;
-  --font-sans: var(--f-sans-latin), var(--f-sans-cyr), var(--f-sans-ext),
+     faqat kerakligini yuklaydi (fonts.ts dagi izohga qarang).
+     TARTIB MUHIM: latin OXIRIDA turadi, chunki faqat u Arial zaxirasini
+     olib keladi. Zaxira kirilldan oldin tursa, rus matni Arial'da chiqadi. */
+  --font-display: var(--f-display-cyr), var(--f-display-ext),
+    var(--f-display-latin), system-ui, sans-serif;
+  --font-sans: var(--f-sans-cyr), var(--f-sans-ext), var(--f-sans-latin),
     system-ui, sans-serif;
 
   /* ---- Easing ---- */
@@ -317,6 +319,12 @@
 
 .word-rise > span > span {
   display: inline-block;
+  /* Gradient matn (background-clip: text) faqat element qutisi ichida
+     bo'yaladi: tor leading'da "g", "y" dumi va manfiy tracking'dagi o'ng
+     chekka qutidan chiqib, ko'rinmay qolardi. Padding qutini kengaytiradi,
+     manfiy margin esa joylashuvni o'zgarishsiz qoldiradi. */
+  padding: 0.2em 0.08em;
+  margin: -0.2em -0.08em;
   animation: word-rise 0.9s var(--ease-expo) both;
   animation-delay: calc(var(--eg-d, 0s) + var(--eg-i, 0) * 0.07s);
 }

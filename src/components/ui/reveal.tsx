@@ -147,7 +147,11 @@ export function RevealWords({
     >
       {words.map((w, i) => (
         <Fragment key={i}>
-          <span className="inline-block overflow-hidden pb-[0.12em]">
+          {/* Niqob (overflow-hidden) — so'z pastdan "ko'tarilishi" uchun.
+              Yuqoriga va yonlarga padding + manfiy margin: "Ё", "Й" kabi
+              diakritikalar va manfiy tracking'dagi o'ng chekka kesilmaydi,
+              joylashuv esa o'zgarmaydi. */}
+          <span className="-mx-[0.08em] -mt-[0.25em] inline-block overflow-hidden px-[0.08em] pt-[0.25em] pb-[0.12em]">
             <span
               className={wordClassName}
               style={{ "--eg-i": i } as CSSProperties}
