@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
 import { site } from "@/lib/site";
+import { getSiteContacts } from "@/lib/repo";
 
 /**
  * Ijtimoiy tarmoqlarda ulashilganda ko'rinadigan rasm (Telegram, Facebook,
@@ -19,6 +20,7 @@ export default async function OgImage({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
+  const { main: phone } = await getSiteContacts();
 
   /* Matnni so'z chegarasida kesamiz — "1–5 yil k" kabi qoldiq bo'lmasin */
   const clip = (text: string, max: number) =>
@@ -88,7 +90,7 @@ export default async function OgImage({
             paddingTop: 24,
           }}
         >
-          <div style={{ display: "flex" }}>{site.phones[0]}</div>
+          <div style={{ display: "flex" }}>{phone}</div>
           <div style={{ display: "flex" }}>
             {locale === "uz" ? "Toshkent · Jizzax · Samarqand" : "Ташкент · Джизак · Самарканд"}
           </div>

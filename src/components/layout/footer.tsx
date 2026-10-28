@@ -3,12 +3,14 @@ import { Mail, MapPin, Phone, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { categories } from "@/data/categories";
 import { site } from "@/lib/site";
+import { telHref } from "@/lib/phones";
 import type { Locale } from "@/lib/types";
 import { t } from "@/lib/utils";
 import { SOCIALS } from "@/components/ui/social-icons";
 import { Logo } from "./logo";
 
-export function Footer() {
+/** `phones` — admin paneldagi ko'rinadigan raqamlar (layout uzatadi) */
+export function Footer({ phones }: { phones: string[] }) {
   const tf = useTranslations("footer");
   const tn = useTranslations("nav");
   const tcon = useTranslations("contact");
@@ -110,10 +112,10 @@ export function Footer() {
               <li className="flex gap-3">
                 <Phone className="mt-0.5 size-4 shrink-0 text-brand-400" strokeWidth={2.2} />
                 <div className="space-y-1">
-                  {site.phones.map((p) => (
+                  {phones.map((p) => (
                     <a
                       key={p}
-                      href={`tel:${p.replace(/\s/g, "")}`}
+                      href={telHref(p)}
                       className="block text-[14.5px] font-semibold text-white/80 transition-colors hover:text-brand-400"
                     >
                       {p}

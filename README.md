@@ -63,6 +63,11 @@ Imkoniyatlar:
   rasm yuklash (`public/uploads/`), narx / soni / tavsif (uz+ru)
 - **Buyurtmalar** — ro'yxat, mijoz ma'lumotlari, holatni o'zgartirish
 - **Arizalar** — kalkulyator, aloqa formasi va "qo'ng'iroq so'rovi" arizalari
+- **Telefon raqamlar** — saytdagi barcha kompaniya raqamlari: qo'shish, o'zgartirish,
+  o'chirish, yashirish, tartib, «asosiy» raqam (header, mobil menyu, CTA, Telegram bot)
+  va filialga biriktirish. Saqlangach sayt darhol yangilanadi. Bazada raqam bo'lmasa
+  (yoki `SitePhone` jadvali hali yaratilmagan bo'lsa) `+998 55 055 05 05` ko'rsatiladi —
+  standart qiymat `src/lib/phones.ts` da. Yangi jadval uchun bir marta: `npm run db:push`
 
 ## Telegram bot
 

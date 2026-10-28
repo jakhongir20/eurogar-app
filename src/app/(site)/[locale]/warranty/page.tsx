@@ -9,7 +9,8 @@ import {
   Wrench,
   XCircle,
 } from "lucide-react";
-import { site } from "@/lib/site";
+import { telHref } from "@/lib/phones";
+import { getSiteContacts } from "@/lib/repo";
 import type { Locale } from "@/lib/types";
 import { t as tr } from "@/lib/utils";
 import type { I18nText } from "@/lib/types";
@@ -92,6 +93,7 @@ export default async function WarrantyPage({
   setRequestLocale(locale);
   const l = locale as Locale;
   const tw = await getTranslations("warranty");
+  const { phones } = await getSiteContacts();
   const tn = await getTranslations("nav");
 
   return (
@@ -206,10 +208,10 @@ export default async function WarrantyPage({
                   ))}
                 </div>
                 <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-5">
-                  {site.phones.map((p) => (
+                  {phones.map((p) => (
                     <a
                       key={p}
-                      href={`tel:${p.replace(/\s/g, "")}`}
+                      href={telHref(p)}
                       className="font-display text-[16px] font-extrabold text-white transition-colors hover:text-brand-400"
                     >
                       {p}

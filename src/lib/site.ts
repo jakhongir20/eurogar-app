@@ -1,11 +1,14 @@
 import type { I18nText } from "./types";
 
-/** Bitta joydan boshqariladigan kompaniya ma'lumotlari — keyin admin paneldan tahrirlanadi */
+/**
+ * Bitta joydan boshqariladigan kompaniya ma'lumotlari.
+ * Telefon raqamlar bu yerda emas — admin paneldan boshqariladi
+ * (/panel/admin/phones, `src/lib/phones.ts`, `getSiteContacts`).
+ */
 export const site = {
   name: "EUROGAR",
   domain: "eurogar.uz",
   tagline: { uz: "Qulaylikni birga yaratamiz", ru: "Создаём удобство вместе" },
-  phones: ["+998 91 888 02 01", "+998 90 888 02 01", "+998 77 517 02 01"],
   email: "info@eurogar.uz",
   telegram: "https://t.me/eurogar_uz",
   instagram: "https://www.instagram.com/eurogar_uz",
@@ -22,7 +25,7 @@ export const site = {
   },
 } as const;
 
-/* ─────────────── Filiallar ─────────────── */
+/* ─────────────── Filiallar (telefoni — admin paneldan) ─────────────── */
 
 export interface Branch {
   id: string;
@@ -31,7 +34,6 @@ export interface Branch {
   lat: number;
   lng: number;
   mapUrl: string;
-  phone: string;
   main?: boolean;
 }
 
@@ -42,7 +44,6 @@ export const branches: Branch[] = [
     lat: 41.284989,
     lng: 69.359723,
     mapUrl: "https://www.google.com/maps?q=41.284989,69.359723",
-    phone: "+998 91 888 02 01",
     main: true,
   },
   {
@@ -51,7 +52,6 @@ export const branches: Branch[] = [
     lat: 40.162338,
     lng: 67.83664,
     mapUrl: "https://www.google.com/maps?q=40.162338,67.836640",
-    phone: "+998 90 888 02 01",
   },
   {
     id: "samarkand",
@@ -59,7 +59,6 @@ export const branches: Branch[] = [
     lat: 39.675902,
     lng: 66.948031,
     mapUrl: "https://www.google.com/maps?q=39.675902,66.948031",
-    phone: "+998 77 517 02 01",
   },
 ];
 

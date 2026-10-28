@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ExternalLink, MapPin, Phone } from "lucide-react";
 import { branches } from "@/lib/site";
+import { telHref } from "@/lib/phones";
+import { useSiteContacts } from "@/components/contacts-provider";
 import type { Locale } from "@/lib/types";
 import { cn, t as tr } from "@/lib/utils";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -18,6 +20,7 @@ export function ShowroomsSection() {
   const t = useTranslations("showrooms");
   const tb = useTranslations("branches");
   const locale = useLocale() as Locale;
+  const contacts = useSiteContacts();
 
   const [activeId, setActiveId] = useState(
     branches.find((b) => b.main)?.id ?? branches[0].id,
@@ -35,6 +38,7 @@ export function ShowroomsSection() {
   );
 
   const active = branches.find((b) => b.id === activeId) ?? branches[0];
+  const activePhone = contacts.branchPhones[active.id] ?? contacts.main;
 
   return (
     <Section tone="light" id="showrooms">
@@ -106,11 +110,11 @@ export function ShowroomsSection() {
               </div>
 
               <a
-                href={`tel:${active.phone.replace(/\s/g, "")}`}
+                href={telHref(activePhone)}
                 className="mt-4 flex items-center gap-2 text-[15px] font-bold text-graphite transition-colors hover:text-brand-600"
               >
                 <Phone className="size-4 text-brand-600" strokeWidth={2.3} />
-                {active.phone}
+                {activePhone}
               </a>
 
               <a

@@ -5,6 +5,8 @@ import { motion } from "motion/react";
 import { ArrowUpRight, Mail, MapPin, Phone, X } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { site } from "@/lib/site";
+import { telHref } from "@/lib/phones";
+import { useSiteContacts } from "@/components/contacts-provider";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/types";
 import { Logo } from "./logo";
@@ -17,6 +19,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
   const locale = useLocale() as Locale;
   const pathname = usePathname();
   const router = useRouter();
+  const { main: phone } = useSiteContacts();
 
   const switchLocale = (next: Locale) => {
     if (next !== locale) router.replace(pathname, { locale: next });
@@ -122,7 +125,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
           </div>
 
           <a
-            href={`tel:${site.phones[0].replace(/\s/g, "")}`}
+            href={telHref(phone)}
             className="flex items-center gap-3 rounded-2xl border border-bone-300 bg-white px-4 py-3.5"
           >
             <Phone className="size-4.5 text-brand-600" strokeWidth={2.2} />
@@ -130,7 +133,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
               <div className="text-[11px] tracking-wide text-muted uppercase">
                 {tcon("phone")}
               </div>
-              <div className="text-[15px] font-bold text-graphite">{site.phones[0]}</div>
+              <div className="text-[15px] font-bold text-graphite">{phone}</div>
             </div>
           </a>
 

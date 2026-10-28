@@ -8,10 +8,12 @@ import { fontVars } from "@/app/fonts";
 import { siteUrl } from "@/lib/site-url";
 import { alternatesFor, organizationLd, robotsPolicy } from "@/lib/seo";
 import { branches, site } from "@/lib/site";
+import { getSiteContacts } from "@/lib/repo";
 import { t as tr } from "@/lib/utils";
 import { JsonLd } from "@/components/seo/json-ld";
 import { YandexMetrika } from "@/components/analytics/yandex-metrika";
 import { Providers } from "@/components/providers";
+import { ContactsProvider } from "@/components/contacts-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/layout/cart-drawer";
@@ -72,13 +74,15 @@ export default async function LocaleLayout({
 
   const tm = await getTranslations({ locale, namespace: "meta" });
   const l = locale as (typeof routing.locales)[number];
+  /* Telefon raqamlar — admin paneldan (baza ishlamasa standart raqam) */
+  const contacts = await getSiteContacts();
 
   /* Kompaniya + 3 filial strukturaviy ma'lumotlari — qidiruv natijalarida
      manzil, ish vaqti va telefon chiqishi uchun (LocalBusiness) */
   const orgLd = organizationLd(l, {
     name: site.name,
     description: tm("description"),
-    phones: site.phones,
+    phones: contacts.phones,
     email: site.email,
     socials: [site.telegram, site.instagram, site.facebook, site.youtube],
     branches: branches.map((b) => ({
@@ -86,7 +90,7 @@ export default async function LocaleLayout({
       city: tr(b.city, l),
       lat: b.lat,
       lng: b.lng,
-      phone: b.phone,
+      phone: contacts.branchPhones[b.id] ?? contacts.main,
       main: b.main,
     })),
   });
@@ -100,10 +104,12 @@ export default async function LocaleLayout({
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
           <Providers>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <CartDrawer />
+            <ContactsProvider value={contacts}>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer phones={contacts.phones} />
+              <CartDrawer />
+            </ContactsProvider>
           </Providers>
         </NextIntlClientProvider>
         <JsonLd data={orgLd} />

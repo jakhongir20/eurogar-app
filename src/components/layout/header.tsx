@@ -6,6 +6,8 @@ import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "motion/
 import { Menu, Phone, Search, ShoppingBag, X } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { site } from "@/lib/site";
+import { telHref } from "@/lib/phones";
+import { useSiteContacts } from "@/components/contacts-provider";
 import { cartCount, useCart } from "@/lib/cart-store";
 import { lockScroll, unlockScroll } from "@/lib/scroll-lock";
 import { cn } from "@/lib/utils";
@@ -29,6 +31,7 @@ export function Header() {
   const locale = useLocale() as Locale;
   const pathname = usePathname();
   const router = useRouter();
+  const { main: phone } = useSiteContacts();
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -68,10 +71,10 @@ export function Header() {
           </span>
           <div className="flex items-center gap-6">
             <a
-              href={`tel:${site.phones[0].replace(/\s/g, "")}`}
+              href={telHref(phone)}
               className="font-semibold transition-colors hover:text-brand-600"
             >
-              {site.phones[0]}
+              {phone}
             </a>
             <a
               href={site.telegram}
@@ -160,7 +163,7 @@ export function Header() {
 
             {/* telefon (mobil) */}
             <a
-              href={`tel:${site.phones[0].replace(/\s/g, "")}`}
+              href={telHref(phone)}
               aria-label={tc("callUs")}
               className={cn(
                 "flex size-11 items-center justify-center rounded-full text-graphite transition-all duration-300 hover:bg-bone-300/70 active:scale-90 lg:hidden",

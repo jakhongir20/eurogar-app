@@ -10,6 +10,7 @@ import {
   LogOut,
   Menu,
   Package,
+  Phone,
   Send,
   ShoppingCart,
   Star,
@@ -26,6 +27,7 @@ const NAV = [
   { href: `${ADMIN_BASE}/orders`, key: "orders", Icon: ShoppingCart, exact: false },
   { href: `${ADMIN_BASE}/leads`, key: "leads", Icon: Send, exact: false },
   { href: `${ADMIN_BASE}/reviews`, key: "reviews", Icon: Star, exact: false },
+  { href: `${ADMIN_BASE}/phones`, key: "phones", Icon: Phone, exact: false },
 ];
 
 export function AdminShell({

@@ -3,6 +3,8 @@ import { pageMetadata } from "@/lib/seo";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Clock, Mail, Phone } from "lucide-react";
 import { site } from "@/lib/site";
+import { telHref } from "@/lib/phones";
+import { getSiteContacts } from "@/lib/repo";
 import { SOCIALS } from "@/components/ui/social-icons";
 import { PageHeader } from "@/components/catalog/page-header";
 import { ContactForm } from "@/components/contact/contact-form";
@@ -35,6 +37,7 @@ export default async function ContactPage({
   const t = await getTranslations("contact");
   const tb = await getTranslations("branches");
   const tn = await getTranslations("nav");
+  const { phones } = await getSiteContacts();
 
   return (
     <>
@@ -76,11 +79,13 @@ export default async function ContactPage({
                       {t("phone")}
                     </span>
                   </div>
-                  <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                    {site.phones.map((p) => (
+                  <div
+                    className={`mt-4 grid gap-2 ${phones.length >= 3 ? "sm:grid-cols-3" : phones.length === 2 ? "sm:grid-cols-2" : ""}`}
+                  >
+                    {phones.map((p) => (
                       <a
                         key={p}
-                        href={`tel:${p.replace(/\s/g, "")}`}
+                        href={telHref(p)}
                         className="rounded-2xl border border-bone-300 px-4 py-3 text-center text-[14.5px] font-bold text-graphite transition-all hover:-translate-y-0.5 hover:border-brand-400 hover:text-brand-600"
                       >
                         {p}

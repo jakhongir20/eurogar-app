@@ -95,3 +95,22 @@ model Review {
 
   @@index([status])
 }
+
+/// Saytdagi kompaniya telefon raqamlari — admin paneldan boshqariladi
+/// (/panel/admin/phones). Jadval bo'sh bo'lsa standart raqam bilan seed qilinadi.
+model SitePhone {
+  id        String   @id @default(cuid())
+  /// "+998 55 055 05 05" ko'rinishida saqlanadi
+  number    String
+  /// asosiy raqam — header, mobil menyu, qo'ng'iroq bloki, Telegram bot
+  main      Boolean  @default(false)
+  /// filial kartasida chiqadi: tashkent | jizzakh | samarkand; null — umumiy
+  branchId  String?
+  hidden    Boolean  @default(false)
+  /// ro'yxatdagi tartib — kichigi birinchi
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([hidden])
+}

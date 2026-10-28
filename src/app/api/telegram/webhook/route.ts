@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { site } from "@/lib/site";
+import { getSiteContacts } from "@/lib/repo";
 import { tgSend } from "@/lib/telegram";
 
 /**
@@ -19,16 +20,17 @@ function liveOrigin(req: Request): string | null {
   return host && !host.startsWith("localhost") ? `https://${host}` : null;
 }
 
-const welcome = (origin: string | null) =>
+/* phone — admin paneldagi asosiy raqam */
+const welcome = (origin: string | null, phone: string) =>
   `👋 Assalomu alaykum! <b>${site.name}</b> botiga xush kelibsiz.\n\n` +
   `Savolingiz yoki buyurtmangizni shu yerga yozib qoldiring.\n\n` +
-  `☎️ ${site.phones[0]}\n🕘 Dush–Shan, 9:00–18:00` +
+  `☎️ ${phone}\n🕘 Dush–Shan, 9:00–18:00` +
   (origin ? `\n🌐 ${origin}` : "");
 
-const RECEIVED =
+const received = (phone: string) =>
   `✅ Xabaringiz qabul qilindi!\n\n` +
   `<b>Tez orada siz bilan bog'lanamiz.</b>\n\n` +
-  `Shoshilinch bo'lsa: ☎️ ${site.phones[0]}`;
+  `Shoshilinch bo'lsa: ☎️ ${phone}`;
 
 export async function POST(req: Request) {
   /* Webhook'ni faqat Telegram chaqira olishi uchun maxfiy sarlavha tekshiruvi */
@@ -57,9 +59,10 @@ export async function POST(req: Request) {
           `buyurtma va arizalar shu yerga tushadi.`,
       );
     } else if (isPrivate) {
+      const { main: phone } = await getSiteContacts();
       await tgSend(
         chatId,
-        /^\/start\b/.test(text) ? welcome(liveOrigin(req)) : RECEIVED,
+        /^\/start\b/.test(text) ? welcome(liveOrigin(req), phone) : received(phone),
       );
     }
     /* guruhdagi oddiy xabarlar — javobsiz, spam bo'lmasin */

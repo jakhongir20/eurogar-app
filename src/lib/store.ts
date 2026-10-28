@@ -4,6 +4,7 @@
  * API route'lar interfeysi o'zgarmaydi.
  */
 import type { Order, OrderStatus, Review, ReviewStatus } from "./types";
+import { DEFAULT_PHONE, type SitePhone } from "./phones";
 
 type Lead = {
   id: string;
@@ -17,12 +18,28 @@ type Lead = {
 };
 
 const g = globalThis as unknown as {
-  __eurogar?: { orders: Order[]; leads: Lead[]; reviews: Review[]; seq: number };
+  __eurogar?: {
+    orders: Order[];
+    leads: Lead[];
+    reviews: Review[];
+    phones: SitePhone[];
+    seq: number;
+  };
 };
 
-g.__eurogar ??= { orders: [], leads: [], reviews: [], seq: 1041 };
+g.__eurogar ??= { orders: [], leads: [], reviews: [], phones: [], seq: 1041 };
 const db = g.__eurogar;
 db.reviews ??= []; // eski sessiya obyekti uchun
+db.phones ??= [];
+if (db.phones.length === 0)
+  db.phones.push({
+    id: "default",
+    number: DEFAULT_PHONE,
+    main: true,
+    branchId: null,
+    hidden: false,
+    sortOrder: 0,
+  });
 
 export const nextCode = (prefix: string) => `${prefix}-${++db.seq}`;
 
@@ -85,6 +102,45 @@ export function deleteReview(id: string) {
   const i = db.reviews.findIndex((x) => x.id === id);
   if (i < 0) return false;
   db.reviews.splice(i, 1);
+  return true;
+}
+
+/* ---- telefon raqamlar ---- */
+type PhonePatch = Partial<Omit<SitePhone, "id">>;
+
+export const listPhones = () =>
+  [...db.phones].sort((a, b) => a.sortOrder - b.sortOrder);
+
+export function addPhone(p: Omit<SitePhone, "id" | "sortOrder">) {
+  if (p.main) db.phones.forEach((x) => (x.main = false));
+  const phone: SitePhone = {
+    ...p,
+    id: crypto.randomUUID(),
+    sortOrder: Math.max(-1, ...db.phones.map((x) => x.sortOrder)) + 1,
+  };
+  db.phones.push(phone);
+  return phone;
+}
+
+export function updatePhone(id: string, patch: PhonePatch) {
+  const p = db.phones.find((x) => x.id === id);
+  if (!p) return null;
+  if (patch.main) db.phones.forEach((x) => (x.main = false));
+  Object.assign(p, patch);
+  return p;
+}
+
+export function reorderPhones(ids: string[]) {
+  ids.forEach((id, i) => {
+    const p = db.phones.find((x) => x.id === id);
+    if (p) p.sortOrder = i;
+  });
+}
+
+export function deletePhone(id: string) {
+  const i = db.phones.findIndex((x) => x.id === id);
+  if (i < 0) return false;
+  db.phones.splice(i, 1);
   return true;
 }
 

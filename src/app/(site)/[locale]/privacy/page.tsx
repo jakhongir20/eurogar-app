@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { site } from "@/lib/site";
+import { getSiteContacts } from "@/lib/repo";
 import { PageHeader } from "@/components/catalog/page-header";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -28,7 +29,7 @@ const CONTENT = {
       },
       {
         h: "5. Sizning huquqlaringiz",
-        p: `Istalgan vaqtda o'z ma'lumotlaringizni o'chirishni yoki o'zgartirishni so'rashingiz mumkin — buning uchun ${site.email} manziliga yozing yoki ${site.phones[0]} raqamiga qo'ng'iroq qiling.`,
+        p: `Istalgan vaqtda o'z ma'lumotlaringizni o'chirishni yoki o'zgartirishni so'rashingiz mumkin — buning uchun ${site.email} manziliga yozing yoki {phone} raqamiga qo'ng'iroq qiling.`,
       },
       {
         h: "6. Cookie fayllar",
@@ -59,7 +60,7 @@ const CONTENT = {
       },
       {
         h: "5. Ваши права",
-        p: `Вы можете в любой момент запросить удаление или изменение своих данных — напишите на ${site.email} или позвоните по номеру ${site.phones[0]}.`,
+        p: `Вы можете в любой момент запросить удаление или изменение своих данных — напишите на ${site.email} или позвоните по номеру {phone}.`,
       },
       {
         h: "6. Cookie-файлы",
@@ -89,6 +90,8 @@ export default async function PrivacyPage({
   const tn = await getTranslations("nav");
   const tf = await getTranslations("footer");
   const c = CONTENT[locale as "uz" | "ru"] ?? CONTENT.uz;
+  /* {phone} — admin paneldagi asosiy raqam */
+  const { main: phone } = await getSiteContacts();
 
   return (
     <>
@@ -109,7 +112,7 @@ export default async function PrivacyPage({
                     {b.h}
                   </h2>
                   <p className="mt-3 text-[14.5px] leading-relaxed text-muted">
-                    {b.p}
+                    {b.p.replace("{phone}", phone)}
                   </p>
                 </div>
               </Reveal>

@@ -18,6 +18,7 @@
     "orders": "Buyurtmalar",
     "leads": "Arizalar",
     "reviews": "Sharhlar",
+    "phones": "Telefon raqamlar",
     "openSite": "Saytni ochish",
     "logout": "Chiqish"
   },
@@ -112,5 +113,34 @@
     "unitRu": "O'lchov birligi (ru)",
     "visible": "Saytda ko'rinsin",
     "featuredToggle": "Tanlangan (bosh sahifada)"
+  },
+  "phones": {
+    "add": "Raqam qo'shish",
+    "whereMain": "Asosiy raqam (★) — header, mobil menyu, «Qo'ng'iroq so'rovi» bloki, Telegram bot javoblari va Maxfiylik siyosatida chiqadi.",
+    "whereAll": "Barcha ko'rinadigan raqamlar — footer, Aloqa va Kafolat sahifalarida, tartib shu ro'yxatdagidek (asosiysi birinchi).",
+    "whereBranch": "Filialga biriktirilgan raqam o'sha filial kartasida chiqadi; raqam biriktirilmagan filialda asosiy raqam ko'rsatiladi. O'zgarish saqlangach sayt darhol yangilanadi.",
+    "number": "Raqam",
+    "placeholder": "+998 55 055 05 05",
+    "branch": "Filial",
+    "noBranch": "Umumiy (filialsiz)",
+    "main": "Asosiy",
+    "makeMain": "Asosiy qilish",
+    "visible": "Saytda ko'rinadi",
+    "hidden": "Yashirilgan — saytda chiqmaydi",
+    "show": "Saytda ko'rsatish",
+    "hide": "Saytdan yashirish",
+    "up": "Yuqoriga",
+    "down": "Pastga",
+    "confirmDelete": "{number} raqami o'chirilsinmi?",
+    "empty": "Hozircha raqam yo'q. «Raqam qo'shish» tugmasini bosing — bo'sh paytda saytda +998 55 055 05 05 ko'rsatiladi.",
+    "errors": {
+      "bad_phone": "Raqam noto'g'ri. 9 ta raqam kiriting, masalan: 55 055 05 05",
+      "bad_branch": "Filial noto'g'ri tanlangan",
+      "last_visible": "Saytda kamida bitta raqam ko'rinib turishi kerak — avval boshqa raqam qo'shing",
+      "not_migrated": "Bazada telefonlar jadvali hali yaratilmagan. Loyihada «npm run db:push» ni bir marta ishga tushiring. Hozircha saytda +998 55 055 05 05 ko'rsatilmoqda.",
+      "not_found": "Raqam topilmadi — sahifani yangilang",
+      "unauthorized": "Sessiya tugagan — qayta kiring",
+      "server_error": "Saqlab bo'lmadi, qayta urinib ko'ring"
+    }
   }
 }

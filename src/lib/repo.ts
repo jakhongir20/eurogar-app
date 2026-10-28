@@ -21,6 +21,12 @@ import type {
 import * as mem from "./store";
 import * as memProducts from "./admin-store";
 import type { Lead } from "./store";
+import {
+  DEFAULT_PHONE,
+  resolveContacts,
+  type SiteContacts,
+  type SitePhone,
+} from "./phones";
 
 export const hasDb = () => Boolean(process.env.DATABASE_URL);
 
@@ -31,6 +37,7 @@ type PrismaClientT = import("@/generated/prisma/client").PrismaClient;
 const g = globalThis as unknown as {
   __egPrisma?: PrismaClientT;
   __egSeeded?: Promise<void>;
+  __egPhonesSeeded?: Promise<void>;
 };
 
 /** Boshqa modullar uchun (masalan rate-limit) ochiq klient */
@@ -455,4 +462,148 @@ export async function deleteReview(id: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/* ─────────────────────────── Telefon raqamlar ─────────────────────────── */
+
+/** `prisma db push` hali qilinmagan — SitePhone jadvali bazada yo'q */
+export class PhonesNotMigratedError extends Error {
+  constructor() {
+    super("SitePhone jadvali yo'q — `npm run db:push` ni ishga tushiring");
+  }
+}
+
+const isMissingTable = (e: unknown) =>
+  (e as { code?: string } | null)?.code === "P2021";
+
+/** Jadval yo'qligi xatosini tushunarli xatoga aylantiradi */
+async function phonesTable<T>(fn: (p: PrismaClientT) => Promise<T>): Promise<T> {
+  try {
+    const p = await db();
+    /* Bo'sh jadval bir marta standart raqam bilan to'ldiriladi. Xatoda
+       (masalan jadval hali yo'q) promise tashlanadi — keyingi so'rov qayta urinadi. */
+    await (g.__egPhonesSeeded ??= seedPhones(p).catch((e) => {
+      g.__egPhonesSeeded = undefined;
+      throw e;
+    }));
+    return await fn(p);
+  } catch (e) {
+    if (isMissingTable(e)) throw new PhonesNotMigratedError();
+    throw e;
+  }
+}
+
+async function seedPhones(p: PrismaClientT) {
+  if ((await p.sitePhone.count()) > 0) return;
+  await p.sitePhone.createMany({
+    data: [{ id: "default", number: DEFAULT_PHONE, main: true }],
+    skipDuplicates: true,
+  });
+  console.info(`[repo] telefonlar jadvali bo'sh edi — ${DEFAULT_PHONE} qo'shildi`);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rowToPhone(r: any): SitePhone {
+  return {
+    id: r.id,
+    number: r.number,
+    main: r.main,
+    branchId: r.branchId ?? null,
+    hidden: r.hidden,
+    sortOrder: r.sortOrder,
+  };
+}
+
+const phoneOrder = [{ sortOrder: "asc" as const }, { createdAt: "asc" as const }];
+
+export async function listSitePhones(): Promise<SitePhone[]> {
+  if (!hasDb()) return mem.listPhones();
+  return phonesTable(async (p) =>
+    (await p.sitePhone.findMany({ orderBy: phoneOrder })).map(rowToPhone),
+  );
+}
+
+/**
+ * Sayt uchun (layout, sahifalar, OG rasm, Telegram bot). Hech qachon
+ * yiqilmaydi: baza yoki jadval ishlamasa standart raqam qaytadi.
+ */
+export async function getSiteContacts(): Promise<SiteContacts> {
+  try {
+    return resolveContacts(await listSitePhones());
+  } catch (e) {
+    console.error("[repo] telefonlar o'qilmadi — standart raqam ishlatiladi:", e);
+    return resolveContacts([]);
+  }
+}
+
+export type PhoneInput = Partial<Pick<SitePhone, "number" | "main" | "branchId" | "hidden">>;
+
+export async function createSitePhone(
+  input: PhoneInput & { number: string },
+): Promise<SitePhone> {
+  const data = {
+    number: input.number,
+    main: Boolean(input.main),
+    branchId: input.branchId ?? null,
+    hidden: Boolean(input.hidden),
+  };
+  if (!hasDb()) return mem.addPhone(data);
+  return phonesTable(async (p) => {
+    const max = await p.sitePhone.aggregate({ _max: { sortOrder: true } });
+    const create = p.sitePhone.create({
+      data: { ...data, sortOrder: (max._max.sortOrder ?? -1) + 1 },
+    });
+    /* asosiy raqam bitta bo'ladi */
+    const row = data.main
+      ? (await p.$transaction([
+          p.sitePhone.updateMany({ data: { main: false } }),
+          create,
+        ]))[1]
+      : await create;
+    return rowToPhone(row);
+  });
+}
+
+export async function updateSitePhone(
+  id: string,
+  patch: PhoneInput,
+): Promise<SitePhone | null> {
+  const data = {
+    ...(patch.number != null ? { number: patch.number } : {}),
+    ...(patch.main != null ? { main: Boolean(patch.main) } : {}),
+    ...(patch.branchId !== undefined ? { branchId: patch.branchId } : {}),
+    ...(patch.hidden != null ? { hidden: Boolean(patch.hidden) } : {}),
+  };
+  if (!hasDb()) return mem.updatePhone(id, data);
+  return phonesTable(async (p) => {
+    if (!(await p.sitePhone.findUnique({ where: { id } }))) return null;
+    const update = p.sitePhone.update({ where: { id }, data });
+    const row = data.main
+      ? (await p.$transaction([
+          p.sitePhone.updateMany({ where: { id: { not: id } }, data: { main: false } }),
+          update,
+        ]))[1]
+      : await update;
+    return rowToPhone(row);
+  });
+}
+
+/** Admin ro'yxatidagi tartib — `ids` dagi ketma-ketlik bo'yicha */
+export async function reorderSitePhones(ids: string[]): Promise<void> {
+  if (!hasDb()) return mem.reorderPhones(ids);
+  await phonesTable((p) =>
+    p.$transaction(
+      ids.map((id, i) =>
+        p.sitePhone.updateMany({ where: { id }, data: { sortOrder: i } }),
+      ),
+    ),
+  );
+}
+
+export async function deleteSitePhone(id: string): Promise<boolean> {
+  if (!hasDb()) return mem.deletePhone(id);
+  return phonesTable(async (p) => {
+    const r = await p.sitePhone.deleteMany({ where: { id } });
+    return r.count > 0;
+  });
 }

@@ -2,12 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { Phone } from "lucide-react";
-import { site } from "@/lib/site";
+import { telHref } from "@/lib/phones";
+import { useSiteContacts } from "@/components/contacts-provider";
 import { Reveal } from "@/components/ui/reveal";
 import { LeadForm } from "@/components/forms/lead-form";
 
 export function CtaBand() {
   const t = useTranslations("ctaBand");
+  const { main: phone } = useSiteContacts();
 
   return (
     <section className="dark-section relative overflow-hidden bg-ink-900 py-16 text-white md:py-24">
@@ -37,14 +39,14 @@ export function CtaBand() {
             </Reveal>
             <Reveal delay={0.14}>
               <a
-                href={`tel:${site.phones[0].replace(/\s/g, "")}`}
+                href={telHref(phone)}
                 className="mt-6 inline-flex items-center gap-3 text-white transition-colors hover:text-brand-400"
               >
                 <span className="flex size-11 items-center justify-center rounded-full border border-white/15">
                   <Phone className="size-4.5" strokeWidth={2.2} />
                 </span>
                 <span className="font-display text-[19px] font-extrabold tracking-tight md:text-[22px]">
-                  {site.phones[0]}
+                  {phone}
                 </span>
               </a>
             </Reveal>
